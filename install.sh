@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ============================================================
-#  Claude Code Kaizen — Installer
+#  Claude Code Pipeline Kit — Installer
 #  Installs governance skills into your project's .claude/ dir
 # ============================================================
 
@@ -21,8 +21,8 @@ NC='\033[0m'
 print_banner() {
   echo ""
   echo -e "${CYAN}${BOLD}  ┌─────────────────────────────────────────┐${NC}"
-  echo -e "${CYAN}${BOLD}  │     Claude Code Kaizen v${VERSION}            │${NC}"
-  echo -e "${CYAN}${BOLD}  │     改善 — Continuous Improvement        │${NC}"
+  echo -e "${CYAN}${BOLD}  │   Claude Code Pipeline Kit v${VERSION}        │${NC}"
+  echo -e "${CYAN}${BOLD}  │   Structured Development Pipelines       │${NC}"
   echo -e "${CYAN}${BOLD}  └─────────────────────────────────────────┘${NC}"
   echo ""
 }

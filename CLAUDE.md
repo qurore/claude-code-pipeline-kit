@@ -1,6 +1,6 @@
-# Claude Code Kaizen — Governance Rules
+# Claude Code Pipeline Kit — Governance Rules
 
-> **Kaizen (改善):** Continuous improvement. This CLAUDE.md defines the governance rules that power the Kaizen skill pipelines. Copy this file (or merge its contents) into your project's `CLAUDE.md`.
+> This CLAUDE.md defines the governance rules that power the Pipeline Kit skill pipelines. Copy this file (or merge its contents) into your project's `CLAUDE.md`.
 
 ---
 

@@ -1,8 +1,8 @@
-# Claude Code Kaizen
+# Claude Code Pipeline Kit
 
 **Structured development pipelines for Claude Code. Enterprise-grade quality gates, multi-persona reviews, and self-improving workflows.**
 
-Kaizen (改善) means *continuous improvement*. This toolkit transforms Claude Code from a conversational AI assistant into a **governed engineering pipeline** with quality gates, persona-based reviews, and autonomous self-improvement.
+This toolkit transforms Claude Code from a conversational AI assistant into a **governed engineering pipeline** with quality gates, persona-based reviews, and autonomous self-improvement.
 
 ---
 
@@ -105,8 +105,8 @@ Every modification is archived and tagged with a PDCA cycle ID for full traceabi
 ### Quick Install (All Skills)
 
 ```bash
-git clone https://github.com/qurore/claude-code-kaizen.git
-cd claude-code-kaizen
+git clone https://github.com/qurore/claude-code-pipeline-kit.git
+cd claude-code-pipeline-kit
 ./install.sh /path/to/your-project
 ```
 
