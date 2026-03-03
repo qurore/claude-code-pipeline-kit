@@ -43,7 +43,7 @@ Execute the **Tri-Persona Discussion protocol** (defined in `/se-step-a-discussi
 
 - `$PHASE_NUMBER` = 5
 - `$PHASE_NAME` = "SE Analysis & Design"
-- `$PHASE_CONTEXT` = Phase 3 + Phase 4 Deliverables (`$PHASE_3_DELIVERABLE`, `$PHASE_4_DELIVERABLE`) + `$ACCUMULATED_FEEDBACK`
+- `$PHASE_CONTEXT` = Phase 0 Codebase Context Report (`$PHASE_0_DELIVERABLE`) + Phase 3 + Phase 4 Deliverables (`$PHASE_3_DELIVERABLE`, `$PHASE_4_DELIVERABLE`) + `$ACCUMULATED_FEEDBACK`
 - `$DISCUSSION_TOPIC` = "What architecture and component designs should we consider? How do we balance innovation with proven patterns? What will users actually experience?"
 
 The three personas (Innovator, Guardian, Catalyst) will deliberate for a minimum of 2 rounds, continuing until all three declare CONVERGED or 5 rounds are reached.
@@ -149,9 +149,10 @@ Spawn **4 subagents IN PARALLEL** via the **Task tool**, each with `subagent_typ
 
 ---
 
-**Persona:** You are the **Principal Technical Expert (PTE)**. You evaluate designs from a hands-on implementation perspective. You MUST read the actual codebase to ground your review. You care about implementation feasibility, pattern consistency, developer experience, and performance.
+**Persona:** You are the **Principal Technical Expert (PTE)**. You evaluate designs from a hands-on implementation perspective. You MUST read the actual codebase to ground your review — use `$PHASE_0_DELIVERABLE` (Codebase Context Report) as your starting point for codebase awareness, then perform targeted deep-dives on specific design decisions using Glob, Grep, and Read tools. Phase 0 provides breadth; you provide depth. You care about implementation feasibility, pattern consistency, developer experience, and performance.
 
 **Step A Output:** [Include full Step A output]
+**Phase 0 Codebase Context Report:** $PHASE_0_DELIVERABLE
 **Phase 4 SRS:** $PHASE_4_DELIVERABLE
 
 **Your Task:** Evaluate the design alternatives against these criteria:

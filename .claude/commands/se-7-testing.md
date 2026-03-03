@@ -45,7 +45,7 @@ Execute the **Tri-Persona Discussion protocol** (defined in `/se-step-a-discussi
 
 - `$PHASE_NUMBER` = 7
 - `$PHASE_NAME` = "Testing"
-- `$PHASE_CONTEXT` = Phase 4 + Phase 5 + Phase 6 Deliverables (`$PHASE_4_DELIVERABLE`, `$PHASE_5_DELIVERABLE`, `$PHASE_6_SUMMARY`) + `$ACCUMULATED_FEEDBACK`
+- `$PHASE_CONTEXT` = Phase 0 Codebase Context Report (`$PHASE_0_DELIVERABLE`) + Phase 4 + Phase 5 + Phase 6 Deliverables (`$PHASE_4_DELIVERABLE`, `$PHASE_5_DELIVERABLE`, `$PHASE_6_SUMMARY`) + `$ACCUMULATED_FEEDBACK`
 - `$DISCUSSION_TOPIC` = "What are the coverage gaps, edge cases, and attack surfaces we haven't tested? Where is the implementation most likely to break under real usage?"
 
 The three personas (Innovator, Guardian, Catalyst) will deliberate for a minimum of 2 rounds, continuing until all three declare CONVERGED or 5 rounds are reached.
@@ -183,7 +183,7 @@ If browser automation tools (e.g., Playwright MCP) are available, execute visual
 **Per-Route Protocol:**
 1. Navigate to the target URL
 2. Capture accessibility snapshot
-3. Take screenshot for visual state evidence
+3. Take screenshot for visual state evidence, saving to `.claude/screenshots/evidence-{route-slug}.png`
 4. Check for runtime console errors
 5. Assert: no console errors, snapshot contains expected elements, screenshot captured
 

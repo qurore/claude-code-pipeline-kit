@@ -45,7 +45,7 @@ Execute the **Tri-Persona Discussion protocol** (defined in `/se-step-a-discussi
 
 - `$PHASE_NUMBER` = 4
 - `$PHASE_NAME` = "SE Requirements Definition"
-- `$PHASE_CONTEXT` = Phase 2 + Phase 3 Deliverables (`$PHASE_2_DELIVERABLE`, `$PHASE_3_DELIVERABLE`) + `$ACCUMULATED_FEEDBACK`
+- `$PHASE_CONTEXT` = Phase 0 Codebase Context Report (`$PHASE_0_DELIVERABLE`) + Phase 2 + Phase 3 Deliverables (`$PHASE_2_DELIVERABLE`, `$PHASE_3_DELIVERABLE`) + `$ACCUMULATED_FEEDBACK`
 - `$DISCUSSION_TOPIC` = "What functional requirements, data model entities, and API contracts should we define? Are they testable, consistent, and complete?"
 
 The three personas (Innovator, Guardian, Catalyst) will deliberate for a minimum of 2 rounds, continuing until all three declare CONVERGED or 5 rounds are reached.

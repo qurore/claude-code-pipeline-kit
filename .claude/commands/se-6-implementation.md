@@ -52,7 +52,7 @@ Execute the **Tri-Persona Discussion protocol** (defined in `/se-step-a-discussi
 
 - `$PHASE_NUMBER` = 6
 - `$PHASE_NAME` = "Implementation"
-- `$PHASE_CONTEXT` = Phase 3 + Phase 5 Deliverables (`$PHASE_3_DELIVERABLE`, `$PHASE_5_DELIVERABLE`) + `$ACCUMULATED_FEEDBACK`
+- `$PHASE_CONTEXT` = Phase 0 Codebase Context Report (`$PHASE_0_DELIVERABLE`) + Phase 3 + Phase 5 Deliverables (`$PHASE_3_DELIVERABLE`, `$PHASE_5_DELIVERABLE`) + `$ACCUMULATED_FEEDBACK`
 - `$DISCUSSION_TOPIC` = "What is the optimal task execution order for implementation? Where are the highest risks? What test infrastructure do we need first?"
 
 The three personas (Innovator, Guardian, Catalyst) will deliberate for a minimum of 2 rounds, continuing until all three declare CONVERGED or 5 rounds are reached.

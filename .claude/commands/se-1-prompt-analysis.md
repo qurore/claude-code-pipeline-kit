@@ -39,7 +39,7 @@ Execute the **Tri-Persona Discussion protocol** (defined in `/se-step-a-discussi
 
 - `$PHASE_NUMBER` = 1
 - `$PHASE_NAME` = "Prompt Analysis"
-- `$PHASE_CONTEXT` = The original user feature prompt (`$FEATURE`) + `$ACCUMULATED_FEEDBACK`
+- `$PHASE_CONTEXT` = Phase 0 Codebase Context Report (`$PHASE_0_DELIVERABLE`) + The original user feature prompt (`$FEATURE`) + `$ACCUMULATED_FEEDBACK`
 - `$DISCUSSION_TOPIC` = "Analyze the user's prompt: What are the possible interpretations, hidden assumptions, scope boundaries, and risks? What is the user REALLY asking for?"
 
 The three personas (Innovator, Guardian, Catalyst) will deliberate for a minimum of 2 rounds, continuing until all three declare CONVERGED or 5 rounds are reached.

@@ -212,7 +212,7 @@ For every issue found, record a structured finding.
 }
 ```
 
-**Screenshot rule:** Take a screenshot (`browser_take_screenshot`) for any finding with severity `critical` or `high`. Save to `.claude/site-patrol/reports/screenshots/` with the finding ID as filename.
+**Screenshot rule:** Take a screenshot (`browser_take_screenshot`) for any finding with severity `critical` or `high`. Save to `.claude/screenshots/` with the finding ID as filename (e.g., `.claude/screenshots/F-001.png`).
 
 ### Phase 4: State Update & Session Report
 
@@ -327,7 +327,7 @@ If the user invokes `/site-patrol [focus area]`, prioritize pages related to tha
 7. **Do not re-explore** pages that are already in `exploredPages` unless the user explicitly requests it.
 8. **Save state frequently** — after every page, not just at session end. This protects against context limit interruptions.
 9. **Be thorough** — check EVERY element on the page. A quick glance is not enough. Read the full snapshot.
-10. **Screenshots for evidence** — take screenshots for critical/high findings. They go to `.claude/site-patrol/reports/screenshots/`.
+10. **Screenshots for evidence** — take screenshots for critical/high findings. They go to `.claude/screenshots/`.
 
 ---
 

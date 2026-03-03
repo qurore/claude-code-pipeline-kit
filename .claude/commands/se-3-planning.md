@@ -43,7 +43,7 @@ Execute the **Tri-Persona Discussion protocol** (defined in `/se-step-a-discussi
 
 - `$PHASE_NUMBER` = 3
 - `$PHASE_NAME` = "SE Planning"
-- `$PHASE_CONTEXT` = Phase 1 + Phase 2 Deliverables (`$PHASE_1_DELIVERABLE`, `$PHASE_2_DELIVERABLE`) + `$ACCUMULATED_FEEDBACK`
+- `$PHASE_CONTEXT` = Phase 0 Codebase Context Report (`$PHASE_0_DELIVERABLE`) + Phase 1 + Phase 2 Deliverables (`$PHASE_1_DELIVERABLE`, `$PHASE_2_DELIVERABLE`) + `$ACCUMULATED_FEEDBACK`
 - `$DISCUSSION_TOPIC` = "What implementation approaches should we consider? What are the trade-offs, risks, and dependencies for each? Which approach best balances ambition with pragmatism?"
 
 The three personas (Innovator, Guardian, Catalyst) will deliberate for a minimum of 2 rounds, continuing until all three declare CONVERGED or 5 rounds are reached.

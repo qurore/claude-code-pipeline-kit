@@ -1268,7 +1268,7 @@ Probes are grouped into batches of 3-5. Each batch tests a specific concern.
 10. **Health checks visible.** Show server status before each session.
 11. **Rate limits visible.** Show countdown on 429.
 12. **Adaptive, not scripted.** Respond to whatever UI appears. Never assume specific LLM outputs.
-13. **Screenshots for evidence.** `browser_take_screenshot` for critical/high findings. Save to `.claude/chat-patrol/reports/screenshots/CF-NNN.png`.
+13. **Screenshots for evidence.** `browser_take_screenshot` for critical/high findings. Save to `.claude/screenshots/CF-NNN.png`.
 
 ---
 

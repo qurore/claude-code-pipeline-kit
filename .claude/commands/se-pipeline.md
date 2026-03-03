@@ -1,6 +1,6 @@
 # SE Pipeline: Master Orchestrator
 
-You are the **SE Pipeline Master Orchestrator**. You drive ALL 9 phases of the Software Engineering Pipeline sequentially, handling cross-phase restarts and accumulated feedback automatically.
+You are the **SE Pipeline Master Orchestrator**. You drive ALL phases (0-9) of the Software Engineering Pipeline sequentially, handling cross-phase restarts and accumulated feedback automatically.
 
 > **Configuration Note:** This pipeline uses placeholder commands (`$TEST_CMD`, `$BUILD_CMD`, `$LINT_CMD`, `$TYPE_CHECK_CMD`, `$TEST_COVERAGE_CMD`, `$TEST_E2E_CMD`). Configure these in your project's CLAUDE.md or environment to match your tech stack (e.g., `$TEST_CMD = "npm run test"`, `$BUILD_CMD = "npm run build"`).
 
@@ -60,7 +60,12 @@ You are the **SE Pipeline Master Orchestrator**. You drive ALL 9 phases of the S
 3. Set `$ITERATION = 1`, `$MAX_ITERATIONS = 4`, `$ACCUMULATED_FEEDBACK = ""`
 4. Set `$RESTART_PHASE = 1` (start from the beginning)
 5. Set `$OUTPUT_MODE = "unknown"` (determined after Phase 5)
-6. Initialize deliverable storage for all 9 phases
+6. Initialize deliverable storage for all phases (0-9)
+7. **Execute Phase 0: Codebase Exploration (pre-loop, runs once)**
+   Execute `/se-0-codebase-exploration` protocol with input: `$FEATURE`
+   Steps A→B→C (no Step D — informational report, no approval gate)
+   Store deliverable as `$PHASE_0_DELIVERABLE`
+   Note: Phase 0 runs ONCE before the iteration loop. Codebase facts do not change between iterations. `$PHASE_0_DELIVERABLE` is preserved across ALL cross-phase restarts.
 
 ### Output Mode Detection
 
@@ -87,34 +92,35 @@ while ($ITERATION <= $MAX_ITERATIONS):
   if ($RESTART_PHASE <= 1):
     ── Phase 1: Prompt Analysis ──
     Execute /se-1-prompt-analysis protocol
+    Input: $PHASE_0_DELIVERABLE
     Steps A→B→C→D (internal restarts are FREE)
     GATE: Step D must approve. Store deliverable as $PHASE_1_DELIVERABLE
 
   if ($RESTART_PHASE <= 2):
     ── Phase 2: Prompt Requirements Definition ──
     Execute /se-2-prompt-requirements protocol
-    Input: $PHASE_1_DELIVERABLE
+    Input: $PHASE_0_DELIVERABLE, $PHASE_1_DELIVERABLE
     Steps A→B→C→D (internal restarts are FREE)
     GATE: Step D must approve. Store deliverable as $PHASE_2_DELIVERABLE
 
   if ($RESTART_PHASE <= 3):
     ── Phase 3: SE Planning ──
     Execute /se-3-planning protocol
-    Input: $PHASE_1_DELIVERABLE, $PHASE_2_DELIVERABLE
+    Input: $PHASE_0_DELIVERABLE, $PHASE_1_DELIVERABLE, $PHASE_2_DELIVERABLE
     Steps A→B→C→D (internal restarts are FREE)
     GATE: Step D must approve. Store deliverable as $PHASE_3_DELIVERABLE
 
   if ($RESTART_PHASE <= 4):
     ── Phase 4: SE Requirements Definition ──
     Execute /se-4-requirements protocol
-    Input: $PHASE_2_DELIVERABLE, $PHASE_3_DELIVERABLE
+    Input: $PHASE_0_DELIVERABLE, $PHASE_2_DELIVERABLE, $PHASE_3_DELIVERABLE
     Steps A→B→C→D (internal restarts are FREE)
     GATE: Step D must approve. Store deliverable as $PHASE_4_DELIVERABLE
 
   if ($RESTART_PHASE <= 5):
     ── Phase 5: Analysis & Design ──
     Execute /se-5-design protocol
-    Input: $PHASE_3_DELIVERABLE, $PHASE_4_DELIVERABLE
+    Input: $PHASE_0_DELIVERABLE, $PHASE_3_DELIVERABLE, $PHASE_4_DELIVERABLE
     Steps A→B(4 parallel)→C→D(4 parallel)
     GATE:
       Step B: CEO/CTO ❌ → restart Phase 4 (CROSS-PHASE)
@@ -128,7 +134,7 @@ while ($ITERATION <= $MAX_ITERATIONS):
   if ($RESTART_PHASE <= 6):
     ── Phase 6: Implementation ──
     Execute /se-6-implementation protocol
-    Input: $PHASE_3_DELIVERABLE, $PHASE_5_DELIVERABLE
+    Input: $PHASE_0_DELIVERABLE, $PHASE_3_DELIVERABLE, $PHASE_5_DELIVERABLE
     if ($OUTPUT_MODE == "documentation"):
       Step C: Write documents (no TDD cycle). Step D: Checkpoint review on document quality.
     else:
@@ -140,7 +146,7 @@ while ($ITERATION <= $MAX_ITERATIONS):
     ── Phase 7: Testing ──
     (SKIPPED when $OUTPUT_MODE == "documentation" — no executable code to test)
     Execute /se-7-testing protocol
-    Input: $PHASE_4_DELIVERABLE, $PHASE_5_DELIVERABLE, $PHASE_6_SUMMARY
+    Input: $PHASE_0_DELIVERABLE, $PHASE_4_DELIVERABLE, $PHASE_5_DELIVERABLE, $PHASE_6_SUMMARY
     Steps A→B→C→D
     GATE:
       ✅ → Store report as $PHASE_7_REPORT
@@ -150,7 +156,7 @@ while ($ITERATION <= $MAX_ITERATIONS):
   if ($RESTART_PHASE <= 8):
     ── Phase 8: Evaluation ──
     Execute /se-8-evaluation protocol
-    Input: $PHASE_4_DELIVERABLE, $PHASE_5_DELIVERABLE, $PHASE_6_SUMMARY, $PHASE_7_REPORT
+    Input: $PHASE_0_DELIVERABLE, $PHASE_4_DELIVERABLE, $PHASE_5_DELIVERABLE, $PHASE_6_SUMMARY, $PHASE_7_REPORT
     if ($OUTPUT_MODE == "documentation"):
       R1 evaluates document quality instead of code quality. $PHASE_7_REPORT = "SKIPPED"
     Steps A→B→C(3 parallel)→D
@@ -229,6 +235,7 @@ When the pipeline completes (success, cancellation, or escalation), output:
 ### Phase Results (Final Iteration)
 | Phase | Name | Sub-Steps | Verdict |
 |-------|------|-----------|---------|
+| 0 | Codebase Exploration | A→B→C | ✅ (informational) |
 | 1 | Prompt Analysis | A→B→C→D | ✅/❌ |
 | 2 | Prompt Requirements | A→B→C→D | ✅/❌ |
 | 3 | SE Planning | A→B→C→D | ✅/❌ |
@@ -253,6 +260,7 @@ When the pipeline completes (success, cancellation, or escalation), output:
 | 2 | [Phase.Step] | [Outcome] | [Summary] |
 
 ### Deliverables Produced
+0. Phase 0: Codebase Context Report
 1. Phase 1: Prompt Analysis Document
 2. Phase 2: Prompt Requirements Document
 3. Phase 3: Project Plan

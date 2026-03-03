@@ -45,7 +45,7 @@ Execute the **Tri-Persona Discussion protocol** (defined in `/se-step-a-discussi
 
 - `$PHASE_NUMBER` = 8
 - `$PHASE_NAME` = "Evaluation"
-- `$PHASE_CONTEXT` = Phase 4 + Phase 5 + Phase 6 + Phase 7 Deliverables (`$PHASE_4_DELIVERABLE`, `$PHASE_5_DELIVERABLE`, `$PHASE_6_SUMMARY`, `$PHASE_7_REPORT`) + `$ACCUMULATED_FEEDBACK`
+- `$PHASE_CONTEXT` = Phase 0 Codebase Context Report (`$PHASE_0_DELIVERABLE`) + Phase 4 + Phase 5 + Phase 6 + Phase 7 Deliverables (`$PHASE_4_DELIVERABLE`, `$PHASE_5_DELIVERABLE`, `$PHASE_6_SUMMARY`, `$PHASE_7_REPORT`) + `$ACCUMULATED_FEEDBACK`
 - `$DISCUSSION_TOPIC` = "What aspects of code quality, requirements compliance, and UX architecture need the closest scrutiny? Where are we most likely to have blind spots?"
 
 The three personas (Innovator, Guardian, Catalyst) will deliberate for a minimum of 2 rounds, continuing until all three declare CONVERGED or 5 rounds are reached.

@@ -43,7 +43,7 @@ Execute the **Tri-Persona Discussion protocol** (defined in `/se-step-a-discussi
 
 - `$PHASE_NUMBER` = 2
 - `$PHASE_NAME` = "Prompt Requirements Definition"
-- `$PHASE_CONTEXT` = Phase 1 Deliverable (`$PHASE_1_DELIVERABLE`) + `$ACCUMULATED_FEEDBACK`
+- `$PHASE_CONTEXT` = Phase 0 Codebase Context Report (`$PHASE_0_DELIVERABLE`) + Phase 1 Deliverable (`$PHASE_1_DELIVERABLE`) + `$ACCUMULATED_FEEDBACK`
 - `$DISCUSSION_TOPIC` = "What user stories and acceptance criteria should we derive from the Prompt Analysis? What edge cases and non-functional requirements are we missing?"
 
 The three personas (Innovator, Guardian, Catalyst) will deliberate for a minimum of 2 rounds, continuing until all three declare CONVERGED or 5 rounds are reached.

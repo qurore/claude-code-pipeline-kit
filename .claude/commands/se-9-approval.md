@@ -50,7 +50,7 @@ Execute the **Tri-Persona Discussion protocol** (defined in `/se-step-a-discussi
 
 - `$PHASE_NUMBER` = 9
 - `$PHASE_NAME` = "Final Approval"
-- `$PHASE_CONTEXT` = ALL Phase Deliverables (`$PHASE_1_DELIVERABLE` through `$PHASE_8_REPORT`) + `$ACCUMULATED_FEEDBACK`
+- `$PHASE_CONTEXT` = ALL Phase Deliverables (`$PHASE_0_DELIVERABLE` through `$PHASE_8_REPORT`) + `$ACCUMULATED_FEEDBACK`
 - `$DISCUSSION_TOPIC` = "Is the evidence package complete and compelling? What remaining blockers or risks could prevent approval? Are there any last-minute concerns?"
 
 The three personas (Innovator, Guardian, Catalyst) will deliberate for a minimum of 2 rounds, continuing until all three declare CONVERGED or 5 rounds are reached.

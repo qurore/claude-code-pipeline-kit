@@ -219,6 +219,7 @@ After the discussion completes, display the full Discussion Summary to the user 
 
 | Phase | Discussion Topic |
 |-------|-----------------|
+| 0 | N/A — Phase 0 does not use the Tri-Persona Discussion protocol. It performs direct codebase exploration instead. `$PHASE_0_DELIVERABLE` (Codebase Context Report) is available in `$PHASE_CONTEXT` for all subsequent phases. |
 | 1 | "Analyze the user's prompt: What are the possible interpretations, hidden assumptions, scope boundaries, and risks? What is the user REALLY asking for?" |
 | 2 | "What user stories and acceptance criteria should we derive from the Prompt Analysis? What edge cases and non-functional requirements are we missing?" |
 | 3 | "What implementation approaches should we consider? What are the trade-offs, risks, and dependencies for each? Which approach best balances ambition with pragmatism?" |

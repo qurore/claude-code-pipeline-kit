@@ -37,6 +37,12 @@ Task tool: subagent_type: "general-purpose", model: "opus"
 
 ---
 
+## Playwright Screenshots Save Directory
+
+**ALL `browser_take_screenshot` calls MUST use the `filename` parameter with a path under `.claude/screenshots/`.** Never save screenshots to the project root or any other directory. Example: `filename: ".claude/screenshots/my-screenshot.png"`. Add `.claude/screenshots/` to your `.gitignore`.
+
+---
+
 ## Intent Classification (4-Tier System)
 
 **Before responding to ANY user message, classify the user's intent using the following decision tree:**
@@ -156,7 +162,7 @@ Task tool: subagent_type: "general-purpose", model: "opus"
 
 ## Software Engineering Pipeline (SE Pipeline)
 
-**All tasks that produce file output and require full lifecycle analysis MUST follow the SE Pipeline — a 9-phase quality gate from prompt analysis through final approval.**
+**All tasks that produce file output and require full lifecycle analysis MUST follow the SE Pipeline — a 10-phase (0-9) quality gate from codebase exploration through final approval.**
 
 ### When SE Pipeline Applies
 
@@ -171,13 +177,14 @@ Task tool: subagent_type: "general-purpose", model: "opus"
 
 | Command | Action |
 |---------|--------|
-| **`/se-pipeline [feature]`** | Runs ALL 9 phases end-to-end |
-| `/se-1-prompt-analysis` through `/se-9-approval` | Run individual phases |
+| **`/se-pipeline [feature]`** | Runs ALL phases (0-9) end-to-end |
+| `/se-0-codebase-exploration` through `/se-9-approval` | Run individual phases |
 
 ### Phase Overview
 
 | Phase | Name | Skill | Gate |
 |-------|------|-------|------|
+| 0 | Codebase Exploration | `/se-0-codebase-exploration` | Informational (no approval gate) |
 | 1 | Prompt Analysis | `/se-1-prompt-analysis` | Scope validated |
 | 2 | Prompt Requirements | `/se-2-prompt-requirements` | Traceable to Phase 1 |
 | 3 | SE Planning | `/se-3-planning` | Feasible, dependencies correct |
@@ -188,7 +195,7 @@ Task tool: subagent_type: "general-purpose", model: "opus"
 | 8 | Evaluation | `/se-8-evaluation` | All 3 review rounds pass |
 | 9 | Final Approval | `/se-9-approval` | PM → CTO → CEO approve |
 
-**Each phase has 4 sub-steps: (A) Tri-Persona Discussion, (B) Convergence, (C) Deliverable, (D) Approval.**
+**Phase 0 has 3 steps: (A) Exploration Strategy, (B) Codebase Investigation, (C) Report Generation. Phases 1-9 each have 4 sub-steps: (A) Tri-Persona Discussion, (B) Convergence, (C) Deliverable, (D) Approval.**
 
 ### Cross-Phase Restart Policy
 
@@ -206,6 +213,7 @@ Task tool: subagent_type: "general-purpose", model: "opus"
 
 - Maximum 3 cross-phase restarts (4 total iterations); 5th attempt → human escalation
 - Internal phase restarts (Step D → Step A within same phase) are FREE
+- Phase 0 is pre-loop and preserved across all restarts
 
 ### Phase Skip Policy
 
