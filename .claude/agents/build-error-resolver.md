@@ -39,13 +39,12 @@ npx eslint . --ext .ts,.tsx                    # Lint errors
 | TS2769 | No overload matches this call | Check argument types against function signature |
 | TS6133 | Declared but never used | Remove unused variable/import or prefix with `_` |
 
-### project-specific type gotchas
+### Project-specific type gotchas (example — replace with your project's)
 
-- `SemanticDependency.targetFile` is OPTIONAL (`string | undefined`) -- always guard with `if (!dep.targetFile) continue`
-- `PublicInterfaceSchema` requires a `type` field (enum) -- when mapping from simpler schemas, default to `"function"`
-- `FlatDomain` uses `parentName` not `parentDomain` and `category` not `domainCategory`
-- Zod `.default()` fields: can be `undefined` in `.input` type vs `.output` type -- provide fallbacks
-- `WikiSectionWithChildren` has optional `children` and `architecture_diagrams`
+> Example (substitute for your project): list known type-pitfalls here. Patterns include:
+> - Optional schema fields that look required: guard with explicit `if (!field) continue`
+> - Zod `.default()` divergence between `.input` and `.output` types — always provide explicit fallbacks
+> - Discriminated-union narrowing failures inside generics — assert or refactor
 
 ### Priority levels
 

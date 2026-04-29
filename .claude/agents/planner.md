@@ -42,7 +42,7 @@ Risk factors: shared state mutation, external API changes, database migration or
 - **database migration ordering** -- migrations run in filename order. Plan migration file numbering before writing SQL.
 - **state machine state changes** -- changes to `Annotation.Root()` reducers affect all downstream nodes. Plan state changes as the first task in any graph modification.
 - **Cross-layer completeness** -- per CLAUDE.md, verify the plan covers UI, API, data model, type system, integration, and state layers.
-- **Wiki domain model** -- changes to `analysis_results` JSONB columns require coordinated updates to types, Zod schemas, API routes, and UI rendering.
+- **Domain model coupling** -- changes to JSONB columns require coordinated updates to types, Zod schemas, API routes, and UI rendering.
 
 ## Output standards
 

@@ -51,7 +51,7 @@ You are a Security Reviewer specializing in web application vulnerability detect
 - **payment webhooks** -- always verify `payment-signature` header with `verifyWebhookSignature`.
 - **GitHub App** -- validate webhook signatures. Never expose installation tokens to clients.
 - **LLM prompt injection** -- sanitize user inputs before including in LLM prompts. Never execute LLM output as code.
-- **Wiki data** -- wiki content is LLM-generated. Treat as untrusted when rendering.
+- **LLM-generated content** -- treat all LLM output as untrusted user input. Sanitize before rendering.
 
 ## Output standards
 

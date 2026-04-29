@@ -50,7 +50,7 @@ You are a Dead Code Removal and Consolidation Specialist for your codebase. You 
 
 - **Dynamic imports in Next.js** -- `next/dynamic` and `React.lazy` load components by path string. Grep for the component name in `dynamic()` calls before removing.
 - **Barrel exports** -- `index.ts` files re-export from modules. A function may appear unused but be re-exported through a barrel. Check all `index.ts` files in the directory tree.
-- **your state-machine framework graph modes** -- graph mode files are loaded dynamically via `getWikiSynthesisGraph(mode)`. Verify the mode string is not referenced before removing a graph mode file.
+- **State-machine graph modes** -- if your project uses dynamically-loaded graph modes (e.g., a state-machine framework that resolves modes by string), verify mode strings are not referenced before removing a graph mode file.
 - **API route handlers** -- routes in `app/api/` are accessed via HTTP, not imports. Search for the route path in `fetch()` calls and client code.
 - **database client RPC functions** -- called by name string via `.rpc('function_name')`. Grep for the function name before removing server-side SQL functions.
 - **Agent type references** -- `AgentTypeSchema` enum values are referenced by string in multiple places. Check all usages before removing an agent type.
