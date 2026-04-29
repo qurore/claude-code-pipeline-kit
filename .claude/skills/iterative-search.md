@@ -24,7 +24,7 @@ Cast a broad net using complementary search strategies.
 
 ```
 Glob: **/*wiki*section*.ts            -- file name pattern
-Grep: "analysis_results"                 -- exact string in file contents
+Grep: "analysis_records"                 -- exact string in file contents
 Grep: "domain_category"               -- related concept
 ```
 
@@ -62,10 +62,10 @@ Based on what round 1 revealed, adjust the search strategy.
 | Found implementation but not tests | Glob for `*.test.ts` in the same directory |
 
 **Naming convention alternatives to try:**
-- camelCase vs kebab-case vs snake_case (`wikiSection` vs `wiki-section` vs `analysis_result`)
+- camelCase vs kebab-case vs snake_case (`orderItem` vs `order-item` vs `analysis_record`)
 - Singular vs plural (`section` vs `sections`)
 - Abbreviations vs full names (`config` vs `configuration`)
-- Domain prefixes vs bare names (`wikiSectionService` vs `sectionService`)
+- Domain prefixes vs bare names (`orderItemService` vs `itemService`)
 
 ### 4. Iterate
 
@@ -119,7 +119,7 @@ Stop searching when any termination condition is met.
 
 ## Common pitfalls
 
-- **Repeating the same search with different syntax** -- `grep "analysis_results"` and `grep 'analysis_results'` are the same query. Change the search term, not the quoting.
+- **Repeating the same search with different syntax** -- `grep "analysis_records"` and `grep 'analysis_records'` are the same query. Change the search term, not the quoting.
 - **Reading entire files when grep suffices** -- use `output_mode: "content"` with context lines to check relevance before committing to a full file read.
 - **Not trying alternative naming conventions** -- your project uses camelCase in TypeScript, snake_case in SQL, kebab-case in file names. Try all three before concluding something does not exist.
 - **Exceeding 3 rounds** -- more rounds hit diminishing returns and consume context window. If 3 rounds do not find it, reformulate the question or ask whether the code exists.

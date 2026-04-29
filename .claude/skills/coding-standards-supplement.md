@@ -48,12 +48,12 @@ Supplementary coding standards covering KISS/DRY/YAGNI enforcement, naming conve
 | Constants | UPPER_SNAKE_CASE | `MAX_RETRY_COUNT` |
 | Env vars | UPPER_SNAKE_CASE | `LLM_MODEL` |
 | Zod schemas | PascalCase + `Schema` suffix | `CreateProjectSchema` |
-| TypeScript interfaces | PascalCase (no `I` prefix) | `WikiSection` |
+| TypeScript interfaces | PascalCase (no `I` prefix) | `OrderItem` |
 
 **Function naming:** Use verb-noun pattern:
 ```typescript
 // Correct
-async function fetchWikiSections(wikiId: string) { }
+async function fetchOrderItems(orderId: string) { }
 function calculateTokenBudget(files: string[]) { }
 function isValidDomainCategory(cat: string): boolean { }
 
