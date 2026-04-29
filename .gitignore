@@ -1,0 +1,7 @@
+node_modules/
+*.log
+.DS_Store
+.claude/pipeline-state/se-*-*-*/
+.claude/pdca-archive/cycles/PDCA-*.md
+.claude/sessions/
+.claude/screenshots/
