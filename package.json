@@ -1,0 +1,27 @@
+{
+  "name": "claude-code-pipeline-kit",
+  "version": "1.0.0",
+  "description": "Structured engineering pipelines for Claude Code: SE, EIW, DRW, PDCA with deterministic hook enforcement and persistent pipeline state.",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "anthropic",
+    "ai-pipeline",
+    "code-review",
+    "tdd",
+    "software-engineering",
+    "skill-files",
+    "claude-md",
+    "pipeline-kit"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "cd .claude/hooks && pnpm install && pnpm build",
+    "test": "cd .claude/hooks && pnpm test",
+    "test:install": "bash tests/install.test.sh",
+    "test:brand": "bash tests/no-proprietary-refs.sh",
+    "test:all": "pnpm test:install && pnpm test:brand && pnpm test"
+  }
+}
