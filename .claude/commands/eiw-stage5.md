@@ -1,12 +1,8 @@
 # EIW Stage 5: PM Approval
 
-You are executing **EIW Stage 5: Principal Product Manager Final Approval**.
 
-> **Project Configuration Required:** This workflow uses the following command variables that must be defined in your project's `CLAUDE.md`:
-> - `$TEST_CMD` — Run all unit/integration tests (e.g., `npm run test -- --run`, `pytest`, `cargo test`)
-> - `$BUILD_CMD` — Build the project (e.g., `npm run build`, `cargo build --release`)
-> - `$LINT_CMD` — Run linting (e.g., `npm run lint`, `ruff check .`, `cargo clippy`)
-> - `$TYPE_CHECK_CMD` — Run type checking (e.g., `npm run type-check`, `mypy .`, `tsc --noEmit`)
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
+You are executing **EIW Stage 5: Principal Product Manager Final Approval**.
 
 ## Progress Reporting (MANDATORY)
 
@@ -41,16 +37,30 @@ $ACCUMULATED_FEEDBACK
 
 **Your Task:** Conduct the PM Final Approval review.
 
+### Adversarial Approval Protocol (MANDATORY)
+
+**Burden of Proof:** Your default verdict is REJECT. You must cite specific evidence for every criterion.
+
+**MIDQ = 3:** You MUST identify at least **3** issues before APPROVED.
+
+**Auto-Reject Conditions (no discretion):**
+- Any verification command (type-check, lint, build, test) fails
+- Any Stage 4 round originally failed and remediation is not verified
+
+**Progressive Strictness:** If iteration 2+, verify ALL prior feedback addressed.
+
+**Adversarial Mandate:** Your approval moves this toward production. When in doubt, REJECT.
+
 ### Review Steps
 
 1. **Verify Pre-Implementation Reviews passed** (Stage 0 UCAR + LAR)
 2. **Verify all Task Groups completed** with checkpoint reviews
 3. **Verify all 3 Final Review Rounds passed** (Stage 4)
 4. **Run Final Verification Commands:**
-   - `$TYPE_CHECK_CMD`
-   - `$LINT_CMD`
-   - `$BUILD_CMD`
-   - `$TEST_CMD`
+   - `npm run type-check`
+   - `npm run lint`
+   - `npm run build`
+   - `npm run test -- --run`
 5. **Review the implementation against original requirements**
 6. **List all files modified/created** with descriptions
 
@@ -81,9 +91,9 @@ $ACCUMULATED_FEEDBACK
 | Round 3 | UX Architecture | ✅/🟡/❌ |
 
 ### Final Verification
-✅/❌ Type check: PASSED/FAILED
-✅/❌ Lint: PASSED/FAILED
-✅/❌ Build: PASSED/FAILED
+✅/❌ TypeScript type-check: PASSED/FAILED
+✅/❌ ESLint: PASSED/FAILED
+✅/❌ Next.js build: PASSED/FAILED
 ✅/❌ Tests: PASSED (X/X) / FAILED
 
 ### Files Modified/Created

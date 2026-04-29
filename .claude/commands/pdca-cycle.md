@@ -1,5 +1,17 @@
 # PDCA Cycle: Master Orchestrator
 
+
+
+### Stop hook continuation contract (PIPELINE-STATE-2026-0009)
+
+While `manifest.status === "in_progress"`, the `stop.enforce-pipeline-completion` Claude Code hook
+intercepts any Stop event and forces continuation. PDCA is already fully autonomous (no human gates),
+so this hook reinforces existing semantics: complete all 4 phases regardless of mid-cycle stop attempts.
+Cap is 8 stop injections; the user opts out via `/abort-pipeline`. **MANDATORY lifecycle calls:**
+at init, `node .claude/hooks/bin/sentinel-cli.mjs start --pipeline=se --run-id=<cycle_id> --feature="<trigger>"`
+(PDCA uses `se` for sentinel purposes); on archive write, `... complete --run-id=<cycle_id>`.
+Skipping `complete` leaves the cycle `status: in_progress` and the Stop hook will block subsequent sessions.
+
 You are the **PDCA Cycle Master Orchestrator**. You drive the self-improvement cycle that permanently upgrades pipeline skills based on error analysis and user feedback.
 
 ## CRITICAL: Fully Autonomous Execution

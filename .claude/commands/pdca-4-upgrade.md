@@ -47,7 +47,7 @@ Spawn a single subagent via the **Task tool** with `subagent_type: "general-purp
 
 ### Step 1: Read the Target Skill File
 
-Use the **Read tool** to read the FULL content of the target skill file specified in the Synthesis Document -> Target Skill -> File.
+Use the **Read tool** to read the FULL content of the target skill file specified in the Synthesis Document → Target Skill → File.
 
 If the file cannot be read (not found, permission error), report UPGRADE_FAILED immediately.
 
@@ -159,3 +159,18 @@ Store the full output as `$UPGRADE_CONFIRMATION`. Return to the orchestrator for
 - **Never modify files other than the target skill file** — cross-skill changes are handled by the Consistency Check (v2)
 - **The Edit tool requires exact string matching** — if the "Before" text doesn't match, the edit will fail. This is expected behavior when the skill file has been modified between Phase 3 and Phase 4 (rare in practice since PDCA runs within a single conversation)
 - **One modification per PDCA cycle** — even if Phase 2 identified secondary attributions, each cycle upgrades ONE skill. Secondary attributions may trigger follow-up PDCA cycles in the future.
+
+
+---
+
+## Appendix: Instinct persistence protocol
+> Added by ECC integration. This extends Phase 4 to handle Tier 0 (instinct) outputs.
+
+When Phase 3 outputs an instinct (Tier 0):
+1. Read `.claude/pdca-archive/instincts.md`
+2. Check for semantic duplicates — if the new instinct covers the same lesson as an existing one, skip and note in archive
+3. Count active entries — if count >= 50, remove the oldest entry (FIFO eviction)
+4. Append the new instinct using format: `- [PDCA-YYYY-NNNN] [category] Instinct text (YYYY-MM-DD)`
+5. Verify write: re-read file and confirm entry appears and total count <= 50
+
+**Protocol reference:** `.claude/skills/learning-engine.md`

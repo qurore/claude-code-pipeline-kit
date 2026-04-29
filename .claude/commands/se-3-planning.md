@@ -4,6 +4,8 @@ You are executing **SE Pipeline Phase 3: Software Engineering Planning** for the
 
 ## Phase Purpose
 
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
+
 Produce a project plan with task hierarchy, risk register, approach selection, and dependency mapping. This phase bridges requirements (Phase 2) and formal SE requirements (Phase 4) by defining HOW the work will be structured.
 
 ## Prerequisites
@@ -68,7 +70,7 @@ Spawn a subagent with the following prompt (include Step A output):
 **Your Task:**
 
 1. **Select Approach** — Choose the best approach. Justify with a decision matrix.
-2. **Rank Risks** — Order all risks by severity x likelihood. Top 5 get mitigations.
+2. **Rank Risks** — Order all risks by severity × likelihood. Top 5 get mitigations.
 3. **Define Mitigations** — For each top risk, define a concrete mitigation strategy.
 4. **Task Outline** — Create a high-level task breakdown for the selected approach.
 5. **Sequencing** — Define execution order: what's parallel `[P]`, what's sequential `[S]`.
@@ -109,22 +111,31 @@ Spawn a subagent with the following prompt (include Step A output):
 
 ### After Step B Returns
 
-Display the Convergence Report. Proceed to Step C.
+Display the Convergence Report to the user.
+
+**Assumption Checkpoint (MANDATORY):** Execute the **Assumption Checkpoint Protocol** (defined in se-pipeline.md). Extract planning assumptions from the Convergence Report — including selected approach rationale, risk assessments, and task sequencing decisions. For each, extract the 4 fields (Assumption, Confidence, Current basis, Risk if wrong) and present the 5-column checkpoint table. Yield with "Awaiting your confirmation or amendments before proceeding." and wait for the user's response. Record decisions as Validated Assumptions (6 fields per item).
+
+If zero assumptions require validation: output "No assumptions identified — proceeding to Step C." — no table, no yield.
+
+Pass the validated assumptions as explicit input to Step C alongside the Step A and Step B outputs. Include both Phase 1 validated assumptions (from the Phase 1 deliverable) and Phase 3 validated assumptions together.
+
+Proceed to Step C.
 
 ---
 
 ### Step C: Deliverable Generation
 
-Spawn a subagent with the following prompt (include Step A + B outputs):
+Spawn a subagent with the following prompt (include Step A + B outputs + user checkpoint decisions + Phase 1 deliverable):
 
 ---
 
 **Persona:** You are the **Project Plan Architect**. You produce the formal Phase 3 deliverable: a structured Project Plan with task hierarchy and risk register.
 
-**Step A + B Outputs:** [Include both]
+**Step A + B Outputs + User Checkpoint Decisions:** [Include all]
+**Phase 1 Deliverable:** $PHASE_1_DELIVERABLE
 **Phase 2 Deliverable:** $PHASE_2_DELIVERABLE
 
-**Your Task:** Produce the **Project Plan** — the formal deliverable of Phase 3.
+**Your Task:** Produce the **Project Plan** — the formal deliverable of Phase 3. Section 5 (Validated Assumptions) MUST include all Phase 1 validated assumptions (carried forward from the Phase 1 deliverable's Section 5) plus all Phase 3 validated assumptions (from this phase's checkpoint). Mark each entry's origin as "Phase 1" or "Phase 3".
 
 **Output Format:**
 
@@ -160,13 +171,19 @@ Phase 3: [TG2-2, TG3-1] (parallel)
 |----|------|----------|------------|------------|-------|
 | R-1 | [Risk] | HIGH/MED/LOW | HIGH/MED/LOW | [Mitigation] | [Role] |
 
-### 5. Assumptions & Constraints
+### 5. Validated Assumptions (Phase 1 + Phase 3)
+| ID | Origin | Assumption | Original confidence | Current basis | Risk if wrong | Resolution | User note |
+|----|--------|-----------|---------------------|---------------|---------------|------------|-----------|
+| VA-1 | Phase 1 | [Assumption from Phase 1 checkpoint] | [HIGH/MEDIUM/LOW — descriptor] | [Basis] | [Impact] | CONFIRMED/AMENDED | [Note or ""] |
+| VA-2 | Phase 3 | [Assumption from Phase 3 checkpoint] | [HIGH/MEDIUM/LOW — descriptor] | [Basis] | [Impact] | CONFIRMED/AMENDED/ADDED/REMOVED | [Note or ""] |
+
+### 6. Assumptions & Constraints
 | Type | Description |
 |------|-------------|
 | Assumption | [Assumption] |
 | Constraint | [Constraint] |
 
-### 6. Phase 4 Handoff Notes
+### 7. Phase 4 Handoff Notes
 [Specific guidance for the SE Requirements Definition phase]
 ```
 
@@ -190,6 +207,24 @@ Spawn a subagent with the following prompt (include Step C deliverable):
 **Phase 2 Deliverable:** $PHASE_2_DELIVERABLE
 
 **Your Task:** Validate the Project Plan against these criteria:
+
+### Adversarial Review Protocol (MANDATORY)
+
+**Burden of Proof:** Your default verdict is REJECT. You do NOT look for reasons to reject — you must affirmatively demonstrate that EVERY criterion is satisfied by citing specific deliverable content. If you cannot point to evidence, that criterion FAILS.
+
+**Minimum Issue Discovery Quota (MIDQ = 3):** You MUST identify at least **3** issues (CRITICAL, MAJOR, or MINOR) before rendering any verdict. A verdict with zero issues is INVALID — it signals insufficient review depth. If exhaustive review genuinely yields fewer than 3 issues, state: "Exhaustive adversarial review yielded only N issues after examining [specific areas searched]."
+
+**Auto-Reject Conditions (no discretion — if true, verdict MUST be REJECTED):**
+- Any criterion rated ❌ with no proposed remediation path
+- Deliverable contains internal contradictions
+- Task dependency graph contains a cycle
+- Any P1 user story has zero mapped tasks
+
+**Progressive Strictness:** If this is iteration 2+, you MUST first verify ALL items from `$ACCUMULATED_FEEDBACK` were addressed. Any unaddressed prior feedback = automatic REJECT.
+
+**Adversarial Mandate:** You are a quality gate, not a cheerleader. When in doubt, REJECT — a false rejection costs one FREE restart; a false approval costs a cross-phase restart.
+
+**On REJECT:** Format feedback using the Structured Feedback Entry Format (Critical/Major/Minor issues with locations and required fixes).
 
 1. **Feasibility** — The plan is achievable within the selected approach. No impossible tasks.
 2. **Dependencies Correct** — Task dependencies form a valid DAG (no cycles). Sequential tasks are genuinely blocking.

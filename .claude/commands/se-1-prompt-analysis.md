@@ -4,6 +4,8 @@ You are executing **SE Pipeline Phase 1: Prompt Analysis** for the feature descr
 
 ## Phase Purpose
 
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
+
 Deconstruct the user's prompt to identify all possible interpretations, scope boundaries, ambiguities, and implicit assumptions before any engineering work begins. This prevents downstream rework caused by misunderstood intent.
 
 ## Progress Reporting (MANDATORY)
@@ -102,19 +104,27 @@ Spawn a subagent with the following prompt (include Step A output):
 
 ### After Step B Returns
 
-Display the Convergence Report. If NEEDS_CLARIFICATION items exist, ask the user for clarification before proceeding. Then proceed to Step C.
+Display the Convergence Report to the user.
+
+**Assumption Checkpoint (MANDATORY):** Execute the **Assumption Checkpoint Protocol** (defined in se-pipeline.md). Extract all assumptions from the Convergence Report's "Assumption Status" table — specifically items marked LIKELY or NEEDS_CLARIFICATION. For each, extract the 4 fields (Assumption, Confidence, Current basis, Risk if wrong) and present the 5-column checkpoint table. Yield with "Awaiting your confirmation or amendments before proceeding." and wait for the user's response. Record decisions as Validated Assumptions (6 fields per item).
+
+If zero assumptions require validation: output "No assumptions identified — proceeding to Step C." — no table, no yield.
+
+Pass the validated assumptions as explicit input to Step C alongside the Step A and Step B outputs. These validated assumptions will propagate through the Phase 1 deliverable into Phase 3 and all subsequent phases.
+
+Proceed to Step C.
 
 ---
 
 ### Step C: Deliverable Generation
 
-Spawn a subagent with the following prompt (include Step A + B outputs):
+Spawn a subagent with the following prompt (include Step A + B outputs + user checkpoint decisions):
 
 ---
 
 **Persona:** You are the **Analysis Document Architect**. You produce the formal Phase 1 deliverable: a structured Prompt Analysis Document that downstream phases will consume.
 
-**Step A + B Outputs:** [Include both]
+**Step A + B Outputs + User Checkpoint Decisions:** [Include all]
 
 **Your Task:** Produce the **Prompt Analysis Document** — the formal deliverable of Phase 1.
 
@@ -143,12 +153,17 @@ Spawn a subagent with the following prompt (include Step A + B outputs):
 |----|-----------|--------|-----------------|
 | A-1 | [Assumption] | CONFIRMED/LIKELY | [Impact] |
 
-### 5. Risk Register
+### 5. Validated Assumptions (from Assumption Checkpoint)
+| ID | Assumption | Original confidence | Current basis | Risk if wrong | Resolution | User note |
+|----|-----------|---------------------|---------------|---------------|------------|-----------|
+| VA-1 | [Assumption] | [HIGH/MEDIUM/LOW — descriptor] | [Basis] | [Impact] | CONFIRMED/AMENDED/ADDED/REMOVED | [User's verbatim comment or ""] |
+
+### 6. Risk Register
 | ID | Risk | Severity | Mitigation |
 |----|------|----------|------------|
 | R-1 | [Risk] | HIGH/MED/LOW | [Mitigation] |
 
-### 6. Phase 2 Handoff Notes
+### 7. Phase 2 Handoff Notes
 [Specific guidance for the Prompt Requirements Definition phase]
 ```
 
@@ -172,6 +187,24 @@ Spawn a subagent with the following prompt (include Step C deliverable):
 **Original User Prompt:** $FEATURE
 
 **Your Task:** Validate the Prompt Analysis Document against these criteria:
+
+### Adversarial Review Protocol (MANDATORY)
+
+**Burden of Proof:** Your default verdict is REJECT. You do NOT look for reasons to reject — you must affirmatively demonstrate that EVERY criterion is satisfied by citing specific deliverable content. If you cannot point to evidence, that criterion FAILS.
+
+**Minimum Issue Discovery Quota (MIDQ = 3):** You MUST identify at least **3** issues (CRITICAL, MAJOR, or MINOR) before rendering any verdict. A verdict with zero issues is INVALID — it signals insufficient review depth. If exhaustive review genuinely yields fewer than 3 issues, state: "Exhaustive adversarial review yielded only N issues after examining [specific areas searched]."
+
+**Auto-Reject Conditions (no discretion — if true, verdict MUST be REJECTED):**
+- Any criterion rated ❌ with no proposed remediation path
+- Deliverable contains internal contradictions
+- Any requirement listed has no traceable origin in the user's prompt or codebase context (hallucinated requirement)
+- Any item classified as both IN and OUT scope simultaneously
+
+**Progressive Strictness:** If this is iteration 2+, you MUST first verify ALL items from `$ACCUMULATED_FEEDBACK` were addressed. Any unaddressed prior feedback = automatic REJECT.
+
+**Adversarial Mandate:** You are a quality gate, not a cheerleader. When in doubt, REJECT — a false rejection costs one FREE restart; a false approval costs a cross-phase restart.
+
+**On REJECT:** Format feedback using the Structured Feedback Entry Format (Critical/Major/Minor issues with locations and required fixes).
 
 1. **No Hallucinated Requirements** — Every requirement must trace back to the original prompt or verifiable codebase context. Flag any that appear invented.
 2. **Scope Validated** — IN/OUT scope decisions are reasonable and well-justified.

@@ -2,9 +2,9 @@
 
 You are executing **SE Pipeline Phase 7: Dedicated Testing Phase** for the feature described by the user.
 
-> **Configuration Note:** This phase uses `$TEST_CMD`, `$TEST_COVERAGE_CMD`, `$TEST_E2E_CMD`. Configure these in your project's CLAUDE.md (e.g., `$TEST_CMD = "npm run test"`, `$TEST_COVERAGE_CMD = "npm run test:coverage"`, `$TEST_E2E_CMD = "npm run test:e2e"`).
-
 ## Phase Purpose
+
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
 
 Execute a comprehensive testing phase beyond TDD unit tests. This includes integration testing, E2E testing, performance testing, security testing, and coverage validation. This phase ensures the implementation is production-ready from a quality perspective.
 
@@ -68,7 +68,7 @@ Spawn a subagent with the following prompt (include Step A output):
 
 **Your Task:**
 
-1. **Prioritize Test Cases** — Rank by risk x impact. HIGH priority tests are mandatory; LOW are nice-to-have.
+1. **Prioritize Test Cases** — Rank by risk × impact. HIGH priority tests are mandatory; LOW are nice-to-have.
 2. **Group by Test Type** — Organize into: Unit, Integration, E2E, Security.
 3. **Estimate Effort** — T-shirt size each test case.
 4. **Define Pass Criteria** — Explicit criteria for Phase 7 to pass:
@@ -127,9 +127,9 @@ Spawn a subagent via the **Task tool** with `subagent_type: "general-purpose", m
 1. **Write ALL HIGH priority tests** — Create test files, write tests, run them.
 2. **Write MEDIUM priority tests** — If time allows after HIGH tests pass.
 3. **Run Full Test Suite** — Execute:
-   - `$TEST_CMD` (all unit/integration tests)
-   - `$TEST_COVERAGE_CMD` (coverage report)
-   - `$TEST_E2E_CMD` (if E2E tests were added)
+   - `npm run test` (all unit/integration tests)
+   - `npm run test:coverage` (coverage report)
+   - `npm run test:e2e` (if E2E tests were added)
 4. **Generate Test Report** — Document all results.
 
 **For each test:**
@@ -176,15 +176,19 @@ Spawn a subagent via the **Task tool** with `subagent_type: "general-purpose", m
 
 ---
 
-### Step C2: Visual Testing (Non-Blocking, Optional)
+### Step C3: MCP Visual Testing (Non-Blocking)
 
-If browser automation tools (e.g., Playwright MCP) are available, execute visual verification for each user-facing route affected by this feature. If tools are unavailable, output `SKIPPED: Browser automation tools unavailable` and proceed — this step is NON-BLOCKING.
+> **Protocol Reference:** See `specs/e2e-testing-conventions.md` §MCP Protocol and §Evidence Standard for full details.
+
+If Playwright MCP browser tools are available, execute visual verification for each user-facing route affected by this feature. If MCP tools are unavailable, output `SKIPPED: MCP browser tools unavailable` and proceed — this step is NON-BLOCKING.
+
+**Evidence Cleanup:** Delete old evidence screenshots from `.claude/screenshots/` matching `evidence-*` before generating new evidence.
 
 **Per-Route Protocol:**
-1. Navigate to the target URL
-2. Capture accessibility snapshot
-3. Take screenshot for visual state evidence, saving to `.claude/screenshots/evidence-{route-slug}.png`
-4. Check for runtime console errors
+1. `browser_navigate` to the target URL
+2. `browser_snapshot` to capture accessibility tree
+3. `browser_take_screenshot` to capture visual state, saving to `.claude/screenshots/evidence-{route-slug}-{timestamp}.png`
+4. `browser_console_messages` to check for runtime errors
 5. Assert: no console errors, snapshot contains expected elements, screenshot captured
 
 **Failure Classification:**
@@ -192,20 +196,22 @@ If browser automation tools (e.g., Playwright MCP) are available, execute visual
 - **SPEC_CHANGE** — Design changed, test expectation outdated → update test in this phase
 - **PARTIAL** — Navigate succeeded but screenshot failed → record as PARTIAL, proceed
 
-**Visual Evidence Report (append to Step C output):**
+**MCP Visual Evidence Report (append to Step C output):**
 
 ```
-### Visual Evidence
+### MCP Visual Evidence
 | # | Route | Snapshot | Screenshot | Console | Status |
 |---|-------|----------|------------|---------|--------|
 | 1 | [/path] | ✅/❌ | ✅/❌/PARTIAL | Clean/[N] errors | PASS/FAIL/PARTIAL/SKIPPED |
+
+Evidence directory: evidence/
 ```
 
 ---
 
 ### After Step C Returns
 
-Display the Test Report (including Visual Evidence if generated). Proceed to Step D.
+Display the Test Report (including MCP Visual Evidence if generated). Proceed to Step D.
 
 ---
 
@@ -221,6 +227,21 @@ Spawn a subagent with the following prompt (include Step C report):
 **Phase 4 SRS:** $PHASE_4_DELIVERABLE
 
 **Your Task:** Validate test quality against these criteria:
+
+### Adversarial Review Protocol (MANDATORY)
+
+**Burden of Proof:** Your default verdict is REJECT. You must demonstrate every quality gate criterion is met with specific evidence (test output, coverage numbers, file references).
+
+**MIDQ = 3:** You MUST identify at least **3** issues before rendering any verdict.
+
+**Auto-Reject Conditions (no discretion):**
+- Any test is currently failing
+- Coverage below 80% on lines, branches, or functions for modified files
+- Any criterion rated ❌ with no proposed remediation
+
+**Progressive Strictness:** If iteration 2+, verify ALL prior feedback addressed. Unaddressed feedback = automatic REJECT.
+
+**Adversarial Mandate:** You are a quality gate, not a cheerleader. When in doubt, REJECT.
 
 1. **Coverage Gate** — Line coverage ≥80%, Branch coverage ≥80%, Function coverage ≥80%.
 2. **Zero Failures** — All tests pass. Zero test failures.
@@ -243,7 +264,7 @@ Spawn a subagent with the following prompt (include Step C report):
 | 4 | Edge case coverage | ✅/❌ | [N]/[N] HIGH cases tested |
 | 5 | Security tests pass | ✅/❌ | [N]/[N] passed |
 | 6 | E2E coverage | ✅/❌ | [N] scenarios tested |
-| 7 | Visual evidence | ✅/SKIPPED | NON-BLOCKING: SKIPPED is a valid pass when browser automation unavailable |
+| 7 | MCP visual evidence | ✅/SKIPPED | NON-BLOCKING: SKIPPED is a valid pass when MCP unavailable. See `specs/e2e-testing-conventions.md` §Graceful Degradation |
 
 ### Phase 7 Verdict: ✅ APPROVED / ❌ REJECTED
 **Rationale:** [Explanation]

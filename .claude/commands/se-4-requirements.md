@@ -2,11 +2,11 @@
 
 You are executing **SE Pipeline Phase 4: Software Engineering Requirements Definition** for the feature described by the user.
 
-> **Configuration Note:** This phase references `$TYPE_CHECK_CMD`, `$LINT_CMD`, `$BUILD_CMD`, `$TEST_CMD`, `$TEST_COVERAGE_CMD`. Configure these in your project's CLAUDE.md.
-
 ## Phase Purpose
 
-Produce a formal Software Requirements Specification (SRS) with functional requirements, non-functional requirements, data model entities, API contracts, and project standards compliance. This is the authoritative requirements document that Phase 5 (Design) will implement against.
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
+
+Produce a formal Software Requirements Specification (SRS) with functional requirements, non-functional requirements, data model entities, API contracts, and constitution compliance. This is the authoritative requirements document that Phase 5 (Design) will implement against.
 
 ## Prerequisites
 
@@ -73,7 +73,7 @@ Spawn a subagent with the following prompt (include Step A output):
 2. **Testability Audit** — Every FR must have a concrete, automatable test criterion. Flag any that are vague.
 3. **Eliminate Vagueness** — Replace words like "fast", "responsive", "user-friendly" with measurable metrics.
 4. **API Consistency** — Ensure all endpoints follow existing project conventions (REST patterns, error formats, auth patterns).
-5. **Project Standards Compliance** — Check against any UI/UX rules, coding standards, and design guidelines defined in your project's CLAUDE.md.
+5. **Constitution Compliance** — Check against CLAUDE.md rules (sentence case, text hierarchy, button stability, etc.).
 6. **Gap Analysis** — Identify any user stories from Phase 2 that have no corresponding FR.
 
 **Output Format:**
@@ -97,12 +97,12 @@ Spawn a subagent with the following prompt (include Step A output):
 |----------|-------------|
 | "user-friendly" | "max 3 clicks to complete" |
 
-### Project Standards Compliance
+### Constitution Compliance
 | Rule | Status | Notes |
 |------|--------|-------|
-| [Standard 1] | ✅/❌ | [Notes] |
-| [Standard 2] | ✅/❌ | [Notes] |
-| [Standard 3] | ✅/❌ | [Notes] |
+| Sentence case | ✅/❌ | [Notes] |
+| Text color hierarchy | ✅/❌ | [Notes] |
+| Button stability | ✅/❌ | [Notes] |
 
 ### Gap Analysis
 | Story ID | FR Coverage | Status |
@@ -202,6 +202,19 @@ Spawn a subagent with the following prompt (include Step A + B outputs):
 
 ### 8. Phase 5 Handoff Notes
 [Specific guidance for the Analysis & Design phase]
+
+### 9. Embedded Action Completeness Checklist (CONDITIONAL)
+
+> **Applicability:** Complete this section if ANY feature in this SRS is triggered from within a host container — i.e., the action originates inside a component that has its own lifecycle separate from the feature's (chat drawer, sidebar panel, inline card, modal/dialog, popover, context menu, command palette, embedded widget). If no features match, write "N/A — no embedded actions" and proceed.
+
+| # | Dimension | FR Required | Verification Question |
+|---|-----------|-------------|----------------------|
+| 1 | **Structured Persistence** | The SRS MUST specify WHERE and HOW the action's output/result is persisted (database table, JSONB column, file, etc.) independently of the host container's state. | "If the host container (chat, modal, drawer) is closed and reopened, does the action's result still exist? Where is it stored?" |
+| 2 | **Session Restore** | The SRS MUST specify how the action's state is restored when the user returns — including after page reload, browser back/forward, and re-navigation to the same route. | "If the user navigates away and comes back, can they see the action's result? What query/fetch loads it?" |
+| 3 | **Cross-Component Side-Effect Manifest** | The SRS MUST enumerate EVERY component outside the host container that must update when the action completes (lists, counts, badges, navigation items, status indicators). Each side-effect must have a corresponding FR with a refresh/invalidation mechanism. | "What else on the page or in the app changes when this action succeeds? Is there an FR for each?" |
+| 4 | **Action Trigger Idempotency** | The SRS MUST specify what happens when the user triggers the action multiple times — including rapid double-clicks, re-triggering while a previous invocation is in progress, and re-triggering after a previous success. | "If the user clicks the action button twice quickly, what happens? If they trigger it again after it already succeeded, what happens?" |
+
+> **Failure mode this prevents:** Features triggered from embedded contexts commonly ship with the primary action logic complete but missing persistence (result vanishes on container close), missing restore (result invisible on return visit), missing side-effects (stale data in sibling components), and missing idempotency guards (duplicate operations on re-trigger). Each dimension above MUST map to at least one FR in Section 2, or the SRS is incomplete.
 ```
 
 ---
@@ -218,7 +231,7 @@ Spawn a subagent with the following prompt (include Step C deliverable):
 
 ---
 
-**Persona:** You are the **SRS Validation Reviewer**. You are the quality gate for Phase 4. You ensure the SRS is complete, traceable, testable, and standards-compliant.
+**Persona:** You are the **SRS Validation Reviewer**. You are the quality gate for Phase 4. You ensure the SRS is complete, traceable, testable, and constitution-compliant.
 
 **Phase 4 Deliverable:** [Include Step C output]
 **Phase 2 Deliverable:** $PHASE_2_DELIVERABLE
@@ -226,10 +239,28 @@ Spawn a subagent with the following prompt (include Step C deliverable):
 
 **Your Task:** Validate the SRS against these criteria:
 
+### Adversarial Review Protocol (MANDATORY)
+
+**Burden of Proof:** Your default verdict is REJECT. You do NOT look for reasons to reject — you must affirmatively demonstrate that EVERY criterion is satisfied by citing specific deliverable content. If you cannot point to evidence, that criterion FAILS.
+
+**Minimum Issue Discovery Quota (MIDQ = 3):** You MUST identify at least **3** issues (CRITICAL, MAJOR, or MINOR) before rendering any verdict. A verdict with zero issues is INVALID — it signals insufficient review depth. If exhaustive review genuinely yields fewer than 3 issues, state: "Exhaustive adversarial review yielded only N issues after examining [specific areas searched]."
+
+**Auto-Reject Conditions (no discretion — if true, verdict MUST be REJECTED):**
+- Any criterion rated ❌ with no proposed remediation path
+- Deliverable contains internal contradictions
+- Any FR lacks a concrete, automatable test criterion
+- Any P1 user story has zero corresponding FRs and no justified exclusion
+
+**Progressive Strictness:** If this is iteration 2+, you MUST first verify ALL items from `$ACCUMULATED_FEEDBACK` were addressed. Any unaddressed prior feedback = automatic REJECT.
+
+**Adversarial Mandate:** You are a quality gate, not a cheerleader. When in doubt, REJECT — a false rejection costs one FREE restart; a false approval costs a cross-phase restart.
+
+**On REJECT:** Format feedback using the Structured Feedback Entry Format (Critical/Major/Minor issues with locations and required fixes).
+
 1. **Completeness** — Every P1 user story has corresponding FRs. Data model covers all entities. API contracts cover all endpoints.
 2. **Traceability** — End-to-end traceability from Phase 1 REQ → Phase 2 Story → Phase 4 FR.
 3. **Testability** — Every FR has a concrete, automatable test criterion.
-4. **Project Standards Compliance** — All UI-facing requirements respect the project's coding and design standards.
+4. **Constitution Compliance** — All UI-facing requirements respect CLAUDE.md rules.
 5. **Consistency** — No contradictory requirements. Data model and API contracts align.
 6. **Downstream Readiness** — The SRS provides sufficient detail for Phase 5 design.
 
@@ -244,7 +275,7 @@ Spawn a subagent with the following prompt (include Step C deliverable):
 | 1 | Completeness | ✅/❌ | [Notes] |
 | 2 | Traceability | ✅/❌ | [Notes] |
 | 3 | Testability | ✅/❌ | [Notes] |
-| 4 | Project standards compliance | ✅/❌ | [Notes] |
+| 4 | Constitution compliance | ✅/❌ | [Notes] |
 | 5 | Consistency | ✅/❌ | [Notes] |
 | 6 | Downstream readiness | ✅/❌ | [Notes] |
 

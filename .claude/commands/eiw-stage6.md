@@ -1,8 +1,8 @@
 # EIW Stage 6: CTO Technical Review
 
-You are executing **EIW Stage 6: CTO Technical Review**.
 
-> **Project Configuration Required:** This workflow uses command variables defined in your project's `CLAUDE.md`. See `/eiw-review` for the full list.
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
+You are executing **EIW Stage 6: CTO Technical Review**.
 
 ## Progress Reporting (MANDATORY)
 
@@ -36,6 +36,21 @@ $ACCUMULATED_FEEDBACK
 
 **Your Task:** Conduct a deep technical review across 7 criteria. Read the actual implementation files — do not rely on summaries. Inspect the code, the tests, the types, and the architecture.
 
+### Adversarial Approval Protocol (MANDATORY)
+
+**Burden of Proof:** Your default verdict is REJECT. Cite specific evidence for every criterion.
+
+**MIDQ = 3:** You MUST identify at least **3** issues before APPROVED.
+
+**Auto-Reject Conditions (no discretion):**
+- Any CRITICAL criterion rated ❌
+- N+1 query pattern detected in any database access path
+- `SELECT *` on any table with JSONB/TEXT columns that can exceed 1KB 
+
+**Progressive Strictness:** If iteration 2+, verify ALL prior feedback addressed.
+
+**Adversarial Mandate:** Your approval sends this toward production. False approval has permanent consequences.
+
 ### Review Criteria
 
 | # | Criterion | Severity | What to Evaluate |
@@ -43,7 +58,7 @@ $ACCUMULATED_FEEDBACK
 | 1 | **System Architecture Quality** | CRITICAL | Module boundaries, separation of concerns, coupling/cohesion, dependency direction |
 | 2 | **Technical Debt Assessment** | HIGH | New debt introduced? Existing debt worsened? Shortcuts that will cost 10x later? |
 | 3 | **Security Posture** | CRITICAL | OWASP Top 10 coverage, auth/authz, input validation, secrets management, SQL injection, XSS |
-| 4 | **Scalability & Performance** | HIGH | N+1 queries, unbounded loops, memory leaks, connection pool exhaustion, hot paths under load |
+| 4 | **Scalability & Performance** | HIGH | N+1 queries, unbounded loops, memory leaks, connection pool exhaustion, hot paths under load.  **Database Access Patterns (mandatory sub-checks):** (a) Column projection — `SELECT *` on tables with JSONB/TEXT columns that can exceed 1KB MUST be replaced with explicit column lists excluding large columns; (b) JSONB growth modeling — any JSONB column that accumulates data over time MUST have a pruning or archival strategy documented; (c) Batch sizing — bulk insert/upsert operations touching >50 rows MUST use batched writes (≤50 rows per batch); (d) Atomic operations — read-modify-write sequences on shared counters or JSONB fields MUST use atomic DB operations (RPC, `UPDATE ... SET col = col + 1`, JSONB `\|\|` merge) or explicit row-level locking; (e) Polling strategy — any client-side polling loop MUST implement exponential backoff and a circuit breaker (max consecutive failures before stopping) |
 | 5 | **Infrastructure Readiness** | MEDIUM | Deployment strategy, monitoring hooks, alerting thresholds, rollback plan |
 | 6 | **Code Quality Standards** | HIGH | Naming conventions, "Good Taste" principle, DRY, single responsibility, error handling |
 | 7 | **Dependency & Integration Risk** | MEDIUM | External dependency audit, version pinning, integration point resilience, circuit breakers |

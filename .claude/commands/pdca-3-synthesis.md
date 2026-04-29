@@ -53,7 +53,7 @@ Spawn a single subagent via the **Task tool** with `subagent_type: "general-purp
 
 ### 1. Read the Target Skill File
 
-**MANDATORY:** Use the Read tool to read the FULL content of the skill file identified in the Attribution Report's Primary Attribution -> Skill File field. You MUST work with the actual file content, not from memory.
+**MANDATORY:** Use the Read tool to read the FULL content of the skill file identified in the Attribution Report's Primary Attribution → Skill File field. You MUST work with the actual file content, not from memory.
 
 ### 2. Classify Improvement Tier
 
@@ -168,5 +168,24 @@ If contradictions exist, resolve them in the modification design.
 Store the full output as `$SYNTHESIS_DOCUMENT`.
 
 **Autonomous Decision:**
-- If status is `ACTIONABLE` -> Orchestrator proceeds to Phase 4
-- If status is `NO_ACTIONABLE_IMPROVEMENT` -> Orchestrator skips Phase 4, archives with that status
+- If status is `ACTIONABLE` → Orchestrator proceeds to Phase 4
+- If status is `NO_ACTIONABLE_IMPROVEMENT` → Orchestrator skips Phase 4, archives with that status
+
+
+---
+
+## Appendix: Learning engine integration
+> Added by ECC integration. This extends the existing tier system with a lightweight instinct mechanism.
+
+### Tier 0: Instinct
+When the improvement is a concise operational heuristic (not a rule change to a specific skill file), emit an instinct instead of a Tier 1/2/3 modification.
+
+**Instinct criteria:**
+- The lesson is a single actionable sentence
+- It does not warrant modifying any existing skill file
+- It represents a pattern likely to recur
+
+**Instinct format:** `- [PDCA-YYYY-NNNN] [category] Instinct text (YYYY-MM-DD)`
+**Categories:** error-pattern, workflow-optimization, quality-gate, architectural-principle
+**Write target:** `.claude/pdca-archive/instincts.md`
+**Protocol:** See `.claude/skills/learning-engine.md` for the full instinct persistence protocol.

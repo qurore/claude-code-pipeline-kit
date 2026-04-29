@@ -4,6 +4,8 @@ You are executing **SE Pipeline Phase 0: Codebase Exploration** for the feature 
 
 ## Phase Purpose
 
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
+
 Ground all downstream pipeline phases in verified codebase facts. Phase 0 discovers WHAT EXISTS in the codebase relevant to the feature. It does NOT interpret the user's intent, propose solutions, or evaluate feasibility — those are Phase 1+ concerns.
 
 This phase eliminates the class of errors where requirements, plans, and designs are written without knowledge of actual codebase patterns, conventions, and constraints.
@@ -117,7 +119,7 @@ Execute the exploration plan from Step A using actual codebase tools.
    - Note naming conventions, file organization, component structure
    - Identify API request/response shapes, validation patterns, error handling conventions
 
-3. **Examine database context** — Read relevant migration files in `supabase/migrations/` to understand:
+3. **Examine database context** — Read relevant migration files in `migrations/` to understand:
    - Table structures, column types, constraints
    - RLS policies
    - Indexes and relationships

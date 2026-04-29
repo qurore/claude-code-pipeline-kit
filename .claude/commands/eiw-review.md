@@ -1,13 +1,21 @@
 # EIW Review: Master Orchestrator
 
-You are the **EIW Master Orchestrator**. You drive ALL 8 stages of the Enterprise Implementation Workflow sequentially, handling restarts and accumulated feedback automatically.
 
-> **Project Configuration Required:** This workflow uses the following command variables that must be defined in your project's `CLAUDE.md`:
-> - `$TEST_CMD` — Run all unit/integration tests (e.g., `npm run test -- --run`, `pytest`, `cargo test`)
-> - `$BUILD_CMD` — Build the project (e.g., `npm run build`, `cargo build --release`)
-> - `$LINT_CMD` — Run linting (e.g., `npm run lint`, `ruff check .`, `cargo clippy`)
-> - `$TYPE_CHECK_CMD` — Run type checking (e.g., `npm run type-check`, `mypy .`, `tsc --noEmit`)
-> - `$TEST_COVERAGE_CMD` — Run tests with coverage (e.g., `npm run test:coverage`, `pytest --cov`)
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
+
+
+
+### Stop hook continuation contract (PIPELINE-STATE-2026-0009)
+
+This workflow is enforced by `stop.enforce-pipeline-completion`. While `manifest.status === "in_progress"`,
+any Stop event is intercepted and the model receives a continuation directive. **Resume from the named
+next stage IMMEDIATELY, without acknowledgment or confirmation prompts.** Cap is 8 stop injections per
+run; the user opts out via `/abort-pipeline`. **MANDATORY lifecycle calls:** at Initialization,
+`node .claude/hooks/bin/sentinel-cli.mjs start --pipeline=eiw --run-id=<id> --feature="<desc>"`; at
+Stage 7 success, `... complete --run-id=<id>`. Skipping `complete` leaves the manifest
+`status: in_progress` and the Stop hook will block subsequent sessions.
+
+You are the **EIW Master Orchestrator**. You drive ALL 8 stages of the Enterprise Implementation Workflow sequentially, handling restarts and accumulated feedback automatically.
 
 ## Usage
 
@@ -64,6 +72,7 @@ EIW IS appropriate when DRW escalates a defect fix that requires new DB tables o
 1. Parse the feature description from user input: `$FEATURE = $ARGUMENTS`
 2. Set `$ITERATION = 1`, `$MAX_ITERATIONS = 4`, `$ACCUMULATED_FEEDBACK = ""`
 3. Set `$RESTART_STAGE = 0` (start from the beginning)
+4. Set `$BR_EXECUTED_EIW_1 = false` (EIW-3.5 Bar Raiser guard)
 
 ### Main Loop
 
@@ -92,6 +101,22 @@ while ($ITERATION <= $MAX_ITERATIONS):
     Stage 3: Spawn subagent with QA Lead persona (per /eiw-stage3 protocol)
              Checkpoint review for the Task Group
              GATE: If ❌ REWORK → break to RESTART
+
+  ── Stage 3.5: UX Bar Raiser (EIW-3.5, conditional) ──
+  if ($BR_EXECUTED_EIW_1 == false):
+    Check if implementation contains non-doc files (any file NOT matching doc-only globs:
+    *.md, *.mdx, *.txt, *.json config-only, *.yaml, *.yml)
+    if (non-doc files exist among changed files):
+      Execute /eiw-bar-raiser protocol
+      Set $BR_EXECUTED_EIW_1 = true
+      Append EIW-3.5 critique to $ACCUMULATED_FEEDBACK
+      Set $RESTART_STAGE = 2
+      continue loop  // FREE restart — do NOT increment $ITERATION
+    else:
+      Set $BR_EXECUTED_EIW_1 = true
+      Output: "  ○ EIW-3.5: UX Bar Raiser — SKIPPED (all files match doc-only globs)"
+  else:
+    Output: "  ○ EIW-3.5: UX Bar Raiser — SKIPPED (already executed)"
 
   ── Stage 4: Final 3-Round Review ──
   Spawn 3 subagents IN PARALLEL (per /eiw-stage4 protocol):
@@ -133,6 +158,24 @@ if ($ITERATION > $MAX_ITERATIONS):
   ESCALATE to human operator
 ```
 
+### EIW Restart Condition Table
+
+Every restart follows this authoritative table. Inline GATE comments in the pseudocode above are shorthand; this table is definitive.
+
+| Trigger Source | Condition | Restart Target | Type | Action |
+|---------------|-----------|---------------|------|--------|
+| Stage 3 | REWORK REQUIRED (any task group) | Stage 1 | CROSS-PHASE | Increment $ITERATION |
+| Stage 3.5 | EIW-3.5 Bar Raiser critique (always) | Stage 2 | FREE | Do NOT increment $ITERATION |
+| Stage 4 | Any round FAIL | Stage 1 | CROSS-PHASE | Increment $ITERATION |
+| Stage 5 | PM REJECTED | Stage 1 | CROSS-PHASE | Increment $ITERATION |
+| Stage 6 | CTO IMPLEMENTATION_FLAW | Stage 1 | CROSS-PHASE | Increment $ITERATION |
+| Stage 6 | CTO ARCHITECTURE_INVALIDATED | Stage 0 | CROSS-PHASE | Increment $ITERATION |
+| Stage 7 | CEO REQUIRES_PIVOT | Stage 1 | CROSS-PHASE | Increment $ITERATION |
+| Stage 7 | CEO REJECTED | CANCELLED | TERMINAL | No restart |
+| Any stage | $ITERATION > $MAX_ITERATIONS | ESCALATED | TERMINAL | Escalate to human |
+
+**Rules:** All EIW restarts are CROSS-PHASE (increment $ITERATION) except Stage 0 internal loops (FREE) and Stage 3.5 EIW-3.5 Bar Raiser redo (FREE). Max 3 restarts. ALL accumulated feedback carries forward.
+
 ### Restart Report Format
 
 When a restart is triggered, output:
@@ -159,6 +202,35 @@ When a restart is triggered, output:
 - [Any architecture changes required]
 ```
 
+### Structured Feedback Entry Format
+
+When a rejection occurs at any review gate, the rejecting reviewer MUST produce feedback in this format. The orchestrator appends this entry to `$ACCUMULATED_FEEDBACK`.
+
+| Field | Content |
+|-------|---------|
+| **Iteration** | $ITERATION |
+| **Source** | Stage N / Stage N-RoleX |
+| **Reviewer** | [Persona name] |
+| **Verdict** | REJECTED |
+
+**Critical Issues (MUST fix):**
+
+| # | Issue | Location | Required fix |
+|---|-------|----------|-------------|
+| 1 | [Description] | [Deliverable section or file:line] | [Specific fix] |
+
+**Major Issues (SHOULD fix):**
+
+| # | Issue | Location | Recommended fix |
+|---|-------|----------|----------------|
+
+**Minor Issues (noted):**
+
+| # | Issue | Suggestion |
+|---|-------|-----------|
+
+**Next iteration reviewer MUST:** (1) Confirm each Critical/Major issue is resolved with evidence. (2) Confirm fixes did not introduce new issues.
+
 ### Final Output
 
 When the workflow completes (success, cancellation, or escalation), output:
@@ -177,6 +249,7 @@ When the workflow completes (success, cancellation, or escalation), output:
 | 1 | Task Decomposition | ✅/❌ |
 | 2 | Implementation (TDD) | ✅/❌ |
 | 3 | Checkpoint Reviews | ✅/❌ |
+| 3.5 | UX Bar Raiser (EIW-3.5) | ◆ CRITIQUE / ○ SKIPPED |
 | 4 | Final 3-Round Review | ✅/❌ |
 | 5 | PM Approval | ✅/❌ |
 | 6 | CTO Technical Review | ✅/❌ |
@@ -197,3 +270,4 @@ When the workflow completes (success, cancellation, or escalation), output:
 - **Never skip a stage** — the violation consequences in CLAUDE.md apply
 - **Track progress with TaskCreate/TaskUpdate** throughout the workflow
 - **Carry ALL accumulated feedback** on every restart — feedback from iteration 1 must still be present in iteration 4
+- **Stage 3.5 (EIW-3.5 Bar Raiser) is conditional** — it only executes when non-doc files exist in the implementation AND `$BR_EXECUTED_EIW_1` is false. Its redo is FREE (does not increment $ITERATION). See `/eiw-bar-raiser` and `/bar-raiser-protocol` for full protocol.

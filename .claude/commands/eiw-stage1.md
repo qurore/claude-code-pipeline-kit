@@ -1,8 +1,8 @@
 # EIW Stage 1: Hierarchical Task Decomposition
 
-You are executing **EIW Stage 1: Hierarchical Task Decomposition** for the feature described by the user.
 
-> **Project Configuration Required:** This workflow uses command variables defined in your project's `CLAUDE.md`. See `/eiw-review` for the full list.
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
+You are executing **EIW Stage 1: Hierarchical Task Decomposition** for the feature described by the user.
 
 ## Progress Reporting (MANDATORY)
 

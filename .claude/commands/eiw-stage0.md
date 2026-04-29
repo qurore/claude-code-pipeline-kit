@@ -1,8 +1,8 @@
 # EIW Stage 0: Architecture Review (UCAR + LAR)
 
-You are executing **EIW Stage 0: Pre-Implementation Architecture Review** for the feature described by the user.
 
-> **Project Configuration Required:** This workflow uses command variables defined in your project's `CLAUDE.md`. See `/eiw-review` for the full list.
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
+You are executing **EIW Stage 0: Pre-Implementation Architecture Review** for the feature described by the user.
 
 ## Progress Reporting (MANDATORY)
 
@@ -16,7 +16,7 @@ At stage entry, output:
 During review, output:
 ```
   → UCAR (6 criteria) — Evaluating...
-  → LAR (8 criteria) — Evaluating...
+  → LAR (10 criteria) — Evaluating...
 ```
 
 At completion: `  ✓ Stage 0: UCAR ✅ LAR ✅ — APPROVED` or `  ✗ Stage 0: [UCAR/LAR] REQUIRES REDESIGN`
@@ -73,17 +73,18 @@ Output format:
 
 ### Review 2: Logical Architecture Review (LAR)
 
-Evaluate from the product completeness and system integrity perspective across these 8 criteria:
+Evaluate from the product completeness and system integrity perspective across these 10 criteria:
 
 1. **Data Model Integrity** — Are all entities and relationships correctly modeled?
-2. **API Contract Consistency** — Do endpoints follow existing patterns and conventions? For any endpoint consumed by a client-side SDK hook (e.g., Vercel AI SDK `useChat()`, Stripe.js), verify the server response format matches the SDK's expected wire protocol exactly.
+2. **API Contract Consistency** — Do endpoints follow existing patterns and conventions? For any endpoint consumed by a client-side SDK hook (e.g., your streaming SDK `useChat()`, your payment provider.js), verify the server response format matches the SDK's expected wire protocol exactly (e.g., the SDK-specific wire format, NOT a generic JSON response). 
 3. **State Management Coherence** — Is state handled consistently across the feature?
 4. **Error Boundary Coverage** — Are all failure modes identified and handled?
 5. **Security Posture** — Are authentication, authorization, and data validation complete?
 6. **Scalability Consideration** — Will this design perform under 10x current load?
 7. **Backward Compatibility** — Does this break any existing functionality?
 8. **Dependency Minimization** — Are we introducing only necessary dependencies?
-9. **External ID Mapping Safety** — For any external API integration (Stripe, GitHub, Google, etc.), are opaque external IDs (price IDs, repo IDs, user IDs) explicitly mapped to internal domain concepts through a dedicated mapping layer? Are there tests for mapping lookup failures?
+9. **External ID Mapping Safety** — For any external API integration (your payment provider, GitHub, Google, etc.), are opaque external IDs (price IDs, repo IDs, user IDs) explicitly mapped to internal domain concepts through a dedicated mapping layer? Are there tests for mapping lookup failures? 
+10. **Schema-Flexible Storage Compatibility** — When the architecture involves schema-flexible storage (JSONB columns, NoSQL documents, untyped message payloads, shared config objects, localStorage), verify: (a) All producers writing to the same storage location use a compatible, documented schema — if multiple shapes are valid, a discriminated union with an explicit type field MUST be defined; (b) All consumers parse and validate data shape at the read boundary using a runtime schema (Zod, io-ts, etc.) — never assume shape based on call site ("Parse, don't validate"); (c) Schema changes are additive-only (new optional fields) — breaking changes require explicit migration or versioned schemas with backward-compatible readers. If the architecture does not involve schema-flexible storage, mark as N/A. FAIL if any storage location has multiple producers without a documented compatible schema, or if any consumer reads schema-flexible data without runtime validation. 
 
 Output format:
 ```
@@ -98,11 +99,12 @@ Output format:
 
 ### External Integration Mapping Audit (if applicable)
 For each external API integration in this feature:
-- **Service:** [Stripe/GitHub/Google/etc.]
+- **Service:** [your payment provider/GitHub/Google/etc.]
 - **External IDs Used:** [List opaque IDs: price_xxx, repo_xxx, etc.]
 - **Mapping Strategy:** [Database table / Env var lookup / Enum — NOT substring matching]
 - **Failure Mode Handling:** [What happens if lookup fails? Must be explicit error or logged warning, NOT silent fallback]
 - **Test Coverage:** [Tests for successful mapping + lookup failure]
+
 
 ### LAR Verdict: ✅ APPROVED / ❌ REQUIRES REDESIGN
 **Rationale:** [Explanation]

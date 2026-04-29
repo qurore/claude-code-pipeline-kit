@@ -4,6 +4,8 @@ You are executing **SE Pipeline Phase 2: Prompt Requirements Definition** for th
 
 ## Phase Purpose
 
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
+
 Transform the Prompt Analysis Document (Phase 1 deliverable) into structured user stories with BDD acceptance criteria, prioritized by P1/P2/P3. This phase bridges raw analysis and formal SE requirements.
 
 ## Prerequisites
@@ -123,10 +125,16 @@ Spawn a subagent with the following prompt (include Step A + B outputs):
 
 **Your Task:** Produce the **Prompt Requirements Document** — the formal deliverable of Phase 2.
 
+
 **Mandatory Rules for Key Entities:**
 
 1. **Explicit Cardinality** — For EVERY relationship between Key Entities, you MUST specify the cardinality type: `one-to-one`, `one-to-many`, or `many-to-many`. Do NOT leave relationships described only in prose (e.g., "a folder contains projects"). State the exact cardinality (e.g., "Folder → Project: one-to-many — a project belongs to exactly ONE folder").
 2. **Metaphor Validation** — When a feature maps to a real-world metaphor with established user expectations (folders, directories, containers, inboxes, carts, playlists, albums, threads, etc.), you MUST explicitly state the metaphor, the user's expected cardinality based on that metaphor, and confirm that the specified cardinality matches. If the data model intentionally diverges from the metaphor (e.g., many-to-many tags instead of one-to-many folders), this MUST be flagged as a **Cardinality Divergence** with explicit justification.
+
+
+**Mandatory Rules for Architectural Completeness:**
+
+3. **Architectural Layer Coverage** — For every user-facing feature (any feature a user interacts with directly), user stories MUST collectively cover ALL architectural layers the feature touches. At minimum, verify coverage across: **UI** (page/component rendering and user interaction), **API** (endpoint request/response contracts), **Data Model** (database schema, tables, or state structures), **Type System** (TypeScript types, interfaces, Zod schemas), and **Integration** (wiring between layers — e.g., form submission → API call → DB write → UI feedback). If ANY layer lacks a corresponding user story or acceptance criterion, this is a **Layer Coverage Gap** — you MUST add the missing stories before proceeding. Include a **Layer Coverage Matrix** in the deliverable (see Section 9 in output format).
 
 **Output Format:**
 
@@ -178,6 +186,18 @@ Spawn a subagent with the following prompt (include Step A + B outputs):
 
 ### 8. Phase 3 Handoff Notes
 [Specific guidance for the SE Planning phase]
+
+### 9. Layer Coverage Matrix
+| Architectural Layer | User Stories | Acceptance Criteria Present? | Notes |
+|--------------------|--------------|-----------------------------|-------|
+| UI (page/component) | US-XXX, US-YYY | ✅/❌ | [Notes] |
+| API (endpoints) | US-XXX | ✅/❌ | [Notes] |
+| Data Model (schema) | US-XXX | ✅/❌ | [Notes] |
+| Type System (types/schemas) | US-XXX | ✅/❌ | [Notes] |
+| Integration (cross-layer wiring) | US-XXX | ✅/❌ | [Notes] |
+
+**Layer Coverage Gaps (if any):**
+1. [Layer X has no corresponding user story — MUST be addressed before approval]
 ```
 
 ---
@@ -201,6 +221,24 @@ Spawn a subagent with the following prompt (include Step C deliverable):
 
 **Your Task:** Validate the Prompt Requirements Document against these criteria:
 
+### Adversarial Review Protocol (MANDATORY)
+
+**Burden of Proof:** Your default verdict is REJECT. You do NOT look for reasons to reject — you must affirmatively demonstrate that EVERY criterion is satisfied by citing specific deliverable content. If you cannot point to evidence, that criterion FAILS.
+
+**Minimum Issue Discovery Quota (MIDQ = 3):** You MUST identify at least **3** issues (CRITICAL, MAJOR, or MINOR) before rendering any verdict. A verdict with zero issues is INVALID — it signals insufficient review depth. If exhaustive review genuinely yields fewer than 3 issues, state: "Exhaustive adversarial review yielded only N issues after examining [specific areas searched]."
+
+**Auto-Reject Conditions (no discretion — if true, verdict MUST be REJECTED):**
+- Any criterion rated ❌ with no proposed remediation path
+- Deliverable contains internal contradictions
+- Any Phase 1 REQ has zero corresponding user stories and no justified exclusion
+- Layer Coverage Matrix (Section 9) contains any ❌ gap
+
+**Progressive Strictness:** If this is iteration 2+, you MUST first verify ALL items from `$ACCUMULATED_FEEDBACK` were addressed. Any unaddressed prior feedback = automatic REJECT.
+
+**Adversarial Mandate:** You are a quality gate, not a cheerleader. When in doubt, REJECT — a false rejection costs one FREE restart; a false approval costs a cross-phase restart.
+
+**On REJECT:** Format feedback using the Structured Feedback Entry Format (Critical/Major/Minor issues with locations and required fixes).
+
 1. **Traceability** — Every user story traces to at least one Phase 1 requirement. Every Phase 1 requirement has at least one story (or justified exclusion).
 2. **BDD Quality** — All acceptance criteria use strict Given/When/Then format and are testable.
 3. **No Gaps** — No Phase 1 requirements are unaddressed.
@@ -208,6 +246,7 @@ Spawn a subagent with the following prompt (include Step C deliverable):
 5. **Priority Consistency** — P1 stories are genuinely must-have; P3 stories are genuinely deferrable.
 6. **Downstream Readiness** — The document provides sufficient clarity for Phase 3 planning.
 7. **Entity Cardinality Completeness** — Every Key Entity relationship has an explicit cardinality type (one-to-one, one-to-many, many-to-many). When a feature maps to a real-world metaphor, the cardinality is validated against the user's mental model. Any divergence is flagged and justified.
+8. **Architectural Layer Coverage** — For every user-facing feature, user stories collectively cover ALL architectural layers (UI, API, Data Model, Type System, Integration). The Layer Coverage Matrix (Section 9) shows no gaps. No layer is left without corresponding stories or acceptance criteria.
 
 **Output Format:**
 
@@ -223,6 +262,8 @@ Spawn a subagent with the following prompt (include Step C deliverable):
 | 4 | No scope creep | ✅/❌ | [Notes] |
 | 5 | Priority consistency | ✅/❌ | [Notes] |
 | 6 | Downstream readiness | ✅/❌ | [Notes] |
+| 7 | Entity cardinality completeness | ✅/❌ | [Notes] |
+| 8 | Architectural layer coverage | ✅/❌ | [Notes] |
 
 ### Issues Found
 1. [Issue — if any]

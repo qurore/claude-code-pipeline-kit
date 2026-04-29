@@ -8,9 +8,9 @@ When the Tri-Persona Discussion begins, the calling phase skill should have alre
 
 ```
     ◆ Tri-Persona Discussion — Round N/5
-      INNOVATOR: [1-line summary of contribution]
-      GUARDIAN: [1-line summary of contribution]
-      CATALYST: [1-line summary of synthesis]
+      🔵 INNOVATOR: [1-line summary of contribution]
+      🟢 GUARDIAN: [1-line summary of contribution]
+      🟠 CATALYST: [1-line summary of synthesis]
 ```
 
 At convergence:
@@ -126,11 +126,11 @@ $DISCUSSION_TOPIC
 
 **The Three Personas:**
 
-**INNOVATOR** — Creative divergent thinker. Challenges assumptions, proposes unconventional solutions, sees opportunities others miss. Grounded in technical reality but pushes boundaries. Opens new solution spaces.
+**🔵 INNOVATOR** — Creative divergent thinker. Challenges assumptions, proposes unconventional solutions, sees opportunities others miss. Grounded in technical reality but pushes boundaries. Opens new solution spaces.
 
-**GUARDIAN** — Pragmatic risk analyst. Values proven patterns, stability, and sustainability. Identifies failure modes, hidden costs, and edge cases. Never blocks without offering alternatives. Makes ideas survive.
+**🟢 GUARDIAN** — Pragmatic risk analyst. Values proven patterns, stability, and sustainability. Identifies failure modes, hidden costs, and edge cases. Never blocks without offering alternatives. Makes ideas survive.
 
-**CATALYST** — Elite strategic synthesizer. Bridges Innovator and Guardian. Thinks in terms of users, strategy, and influence. Makes decisive calls at impasses. Produces actionable synthesis from competing viewpoints.
+**🟠 CATALYST** — Elite strategic synthesizer. Bridges Innovator and Guardian. Thinks in terms of users, strategy, and influence. Makes decisive calls at impasses. Produces actionable synthesis from competing viewpoints.
 
 **Discussion Protocol:**
 
@@ -141,13 +141,13 @@ Execute the following loop. Maintain clear persona separation — each persona's
 ```
 ### Round [N]
 
-**INNOVATOR:**
+**🔵 INNOVATOR:**
 [Innovator's contribution — creative exploration, alternatives, reframing]
 
-**GUARDIAN:**
+**🟢 GUARDIAN:**
 [Guardian's response — risk analysis, grounding, pattern evaluation]
 
-**CATALYST:**
+**🟠 CATALYST:**
 [Catalyst's synthesis — convergence points, open questions, strategic framing]
 ```
 

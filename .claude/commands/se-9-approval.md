@@ -4,6 +4,8 @@ You are executing **SE Pipeline Phase 9: Final Approval** for the feature descri
 
 ## Phase Purpose
 
+<!-- PIPELINE-STATE-2026-0001/0002/0003: write Step C deliverable to .claude/pipeline-state/<run-dir>/phase-<N>-<slug>.md; update manifest at Step D; read prior phase from disk at Step A. See specs/pipeline-state-persistence.md and .claude/pipeline-state/SCHEMA.md. -->
+
 Obtain sequential sign-off from PM, CTO, and CEO. This phase absorbs EIW Stages 5, 6, and 7. Each approver reviews the complete body of evidence from all previous phases and issues a final verdict.
 
 ## Prerequisites
@@ -142,11 +144,11 @@ Spawn a subagent via the **Task tool** with `subagent_type: "general-purpose", m
 ### Quality Summary
 | Dimension | Rating | Evidence |
 |-----------|--------|----------|
-| Code Quality | Good/Acceptable/Poor | Phase 8 R1 |
-| Requirements Compliance | Good/Acceptable/Poor | Phase 8 R2 |
-| UX Architecture | Good/Acceptable/Poor | Phase 8 R3 |
-| Test Coverage | Good/Acceptable/Poor | Phase 7 |
-| Security | Good/Acceptable/Poor | Phase 7 + R1 |
+| Code Quality | 🟢/🟡/🔴 | Phase 8 R1 |
+| Requirements Compliance | 🟢/🟡/🔴 | Phase 8 R2 |
+| UX Architecture | 🟢/🟡/🔴 | Phase 8 R3 |
+| Test Coverage | 🟢/🟡/🔴 | Phase 7 |
+| Security | 🟢/🟡/🔴 | Phase 7 + R1 |
 
 ### Risk Disposition
 | Risk | Status |
@@ -196,7 +198,22 @@ Spawn a subagent via the **Task tool** with `subagent_type: "general-purpose", m
 **Phase 4 SRS:** $PHASE_4_DELIVERABLE
 **Phase 8 Evaluation Report:** $PHASE_8_REPORT
 
-**Your Task:** Evaluate against these criteria:
+**Your Task:**
+
+### Adversarial Approval Protocol (MANDATORY)
+
+**Burden of Proof:** Your default verdict is REJECT. Approval sends this to production — false approval has permanent consequences.
+
+**MIDQ = 3:** You MUST identify at least **3** issues before APPROVED verdict.
+
+**Auto-Reject Conditions (no discretion):**
+- Any P1 acceptance criterion not demonstrably satisfied
+
+**Progressive Strictness:** If iteration 2+, verify ALL prior feedback addressed. Unresolved = automatic REJECT.
+
+**Adversarial Mandate:** When in doubt, REJECT. The cost of one more iteration is negligible compared to shipping a defect.
+
+Evaluate against these criteria:
 
 1. **Requirement Satisfaction** — All P1 requirements implemented and tested?
 2. **User Value Delivery** — Does the implementation deliver the intended user value?
@@ -243,14 +260,30 @@ Spawn a subagent via the **Task tool** with `subagent_type: "general-purpose", m
 **Phase 5 Technical Design Document:** $PHASE_5_DELIVERABLE
 **Phase 8 Code Quality Review (R1):** $PHASE_8_R1
 
-**Your Task:** Evaluate against these criteria:
+**Your Task:**
+
+### Adversarial Approval Protocol (MANDATORY)
+
+**Burden of Proof:** Your default verdict is REJECT. Approval sends this to production — false approval has permanent consequences.
+
+**MIDQ = 3:** You MUST identify at least **3** issues before APPROVED verdict.
+
+**Auto-Reject Conditions (no discretion):**
+- Implementation diverges from approved TDD with no rationale
+- Any CRITICAL security finding unresolved
+
+**Progressive Strictness:** If iteration 2+, verify ALL prior feedback addressed. Unresolved = automatic REJECT.
+
+**Adversarial Mandate:** When in doubt, REJECT. The cost of one more iteration is negligible compared to shipping a defect.
+
+Evaluate against these criteria:
 
 1. **Architecture Integrity** — Does the implementation faithfully follow the approved design?
 2. **Security** — No vulnerabilities introduced? Auth/authz correct?
 3. **Scalability** — Will this perform under 10x load?
 4. **Tech Debt** — Acceptable level of tech debt? All documented?
 5. **Production Readiness** — Error handling, monitoring, graceful degradation?
-6. **Code Quality** — Clean data structures and logic?
+6. **Code Quality** — "Good Taste" in data structures and logic?
 7. **Pattern Consistency** — Follows existing codebase conventions?
 
 **Output Format:**
@@ -289,19 +322,34 @@ Spawn a subagent via the **Task tool** with `subagent_type: "general-purpose", m
 
 ---
 
-**Persona:** You are the **CEO** giving final strategic approval. You evaluate whether this feature serves the product's mission and market positioning. You are the final gate before production.
+**Persona:** You are the **CEO** giving final strategic approval. You evaluate whether this feature serves your project's mission and market positioning. You are the final gate before production.
 
 **Final Approval Certificate:** [Step C output with PM + CTO signatures]
 **Phase 1 Prompt Analysis:** $PHASE_1_DELIVERABLE
 
-**Your Task:** Evaluate against these criteria:
+**Your Task:**
 
-1. **Strategic Alignment** — Does this feature serve the product's vision and market positioning?
+### Adversarial Approval Protocol (MANDATORY)
+
+**Burden of Proof:** Your default verdict is REJECT. Approval sends this to production — false approval has permanent consequences.
+
+**MIDQ = 2:** You MUST identify at least **2** issues before APPROVED verdict.
+
+**Auto-Reject Conditions (no discretion):**
+- Feature dilutes AI-assisted positioning (capability unrelated to core value prop)
+
+**Progressive Strictness:** If iteration 2+, verify ALL prior feedback addressed. Unresolved = automatic REJECT.
+
+**Adversarial Mandate:** When in doubt, REJECT. The cost of one more iteration is negligible compared to shipping a defect.
+
+Evaluate against these criteria:
+
+1. **Strategic Alignment** — Does this feature serve your project's AI-assisted positioning?
 2. **Business Value** — Is the delivered value proportional to the development effort?
-3. **Market Impact** — Does this strengthen the competitive position?
+3. **Market Impact** — Does this strengthen our competitive position?
 4. **User Trust** — Will this feature increase or decrease user trust?
 5. **Quality Bar** — Does the quality meet the bar for a professional product?
-6. **Brand Consistency** — Does the implementation reflect the product's brand values?
+6. **Brand Consistency** — Does the implementation reflect your project's brand values?
 7. **Risk Acceptance** — Are all outstanding risks acceptable for production?
 
 **Output Format:**

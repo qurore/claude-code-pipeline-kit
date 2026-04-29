@@ -53,8 +53,6 @@ The EIW has 8 stages (used for focused implementation tasks):
 | 6 | CTO Technical Review | `.claude/commands/eiw-stage6.md` |
 | 7 | CEO Strategic Approval | `.claude/commands/eiw-stage7.md` |
 
-> **Note:** If your project uses different pipeline stages or different skill file names, update the table above to match your actual pipeline structure. The stage references MUST point to real skill files in your `.claude/commands/` directory.
-
 ## Process
 
 Spawn a single subagent via the **Task tool** with `subagent_type: "general-purpose", model: "opus"`:
@@ -69,7 +67,7 @@ Spawn a single subagent via the **Task tool** with `subagent_type: "general-purp
 
 ### 1. Stage-by-Stage Evaluation
 
-For EACH of the pipeline stages listed above, evaluate: *"If this stage had been PERFECT, would the incident have been prevented?"*
+For EACH of the 9 SE Pipeline stages, evaluate: *"If this stage had been PERFECT, would the incident have been prevented?"*
 
 Apply this decision framework:
 - **PREVENTABLE** — This stage directly handles the concern that failed. If its skill file had better instructions, the error would not have occurred.
