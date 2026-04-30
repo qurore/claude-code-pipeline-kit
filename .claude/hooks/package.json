@@ -1,0 +1,39 @@
+{
+  "name": "claude-code-pipeline-kit-hooks",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic enforcement of CLAUDE.md MUST rules and per-run pipeline state persistence",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "smoke-test": "node dist/scripts/smoke-test.js",
+    "audit-opus": "bash scripts/audit-mandatory-opus.sh"
+  },
+  "claudeHooks": {
+    "brandAllowlist": [
+      "GitHub",
+      "OAuth",
+      "Claude",
+      "Vercel",
+      "PostgreSQL",
+      "TypeScript",
+      "JavaScript",
+      "Next.js",
+      "React",
+      "MIT"
+    ],
+    "migrationGlob": ""
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^2.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^2.0.0"
+  }
+}
