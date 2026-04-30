@@ -2,47 +2,37 @@
 
 Welcome to the Claude Code Pipeline Kit documentation.
 
-## Reading order for newcomers
+## Reading paths
 
-If this is your first encounter with the kit, read in this order:
+Pick the path that fits your goal. Each path is intended to be < 30 minutes end-to-end.
 
-1. **[Quickstart](quickstart.md)** -- get a first pipeline running end-to-end in 5 minutes.
-2. **[Architecture](architecture.md)** -- the topology of the kit and how the parts compose.
-3. **[Hooks](hooks.md)** -- the 9 deterministic hooks that enforce CLAUDE.md MUST rules.
-4. **[Pipelines](pipelines.md)** -- the SE / EIW / DRW / PDCA pipelines in full.
-5. **[Customisation](customization.md)** -- changing the model, UI lint, custom skills, project-specific overrides.
-6. **[Contributing](contributing.md)** -- repo structure, dev workflow, running tests.
-7. **[Settings reference](settings-reference.md)** -- annotated walk-through of every key in `.claude/settings.json.template`.
+| Path | For | Read in this order |
+|------|-----|--------------------|
+| **Newcomer (5 min)** | "I want to try the kit." | `quickstart.md` -> `architecture.md` |
+| **Customiser (15 min)** | "I want to bend the kit to my project." | `customization.md` -> `settings-reference.md` -> `hooks.md` |
+| **Contributor (30 min)** | "I want to extend the kit." | `contributing.md` -> `hooks.md` -> `pipeline-state-design.md` -> `pipelines.md` |
+| **Operator** | "I run pipelines and need the reference." | `pipelines.md` (canonical SE/EIW/DRW/PDCA reference) |
 
-## Quick reference (alphabetical)
+## Documentation index
 
 | File | Purpose |
 |------|---------|
-| [`architecture.md`](architecture.md) | Topology, lifecycle, data-flow diagram |
-| [`contributing.md`](contributing.md) | Repository structure, development workflow, test layout |
-| [`customization.md`](customization.md) | Model overrides, UI lint config, migration reminder, project-specific rules |
-| [`hooks.md`](hooks.md) | Per-hook reference (9 hooks) with input contracts and exit codes |
-| [`pipelines.md`](pipelines.md) | SE / EIW / DRW / PDCA full stage reference |
-| [`quickstart.md`](quickstart.md) | 5-minute first-pipeline walk-through |
-| [`settings-reference.md`](settings-reference.md) | Annotated `.claude/settings.json.template` reference |
+| `quickstart.md` | Install and run your first pipeline in < 5 minutes. |
+| `architecture.md` | Topology, lifecycle, data flow, and how hooks gate the lifecycle. |
+| `pipelines.md` | Full SE / EIW / DRW / PDCA reference with restart policies. |
+| `hooks.md` | Per-hook reference — events, payloads, decisions, failure modes. |
+| `customization.md` | Brand allowlist, migration glob, default model override, custom skills. |
+| `settings-reference.md` | Annotations for `.claude/settings.example.json`. |
+| `contributing.md` | Repo structure, dev workflow, building hooks, running tests. |
+| `pipeline-state-design.md` | Design rationale for the per-run state model and sentinel API. |
 
-## Top-level documents
+## Conventions
 
-- [`../CLAUDE.md`](../CLAUDE.md) -- the governance template you copy into your project root.
-- [`../README.md`](../README.md) -- project overview and feature summary.
+- All filenames are lowercase-kebab.
+- All command examples are POSIX-shell (works in `bash` 3.2+ on macOS, `bash` 5+ on Linux).
+- Code blocks targeting a specific runtime declare it (` ```ts ` for TypeScript, ` ```bash ` for shell).
+- `<placeholders>` in commands are angle-bracketed.
 
-## Pipeline state and PDCA archive
+## Where to file issues
 
-- [`../.claude/pipeline-state/SCHEMA.md`](../.claude/pipeline-state/SCHEMA.md) -- shape of `manifest.json` and the per-run directory.
-- [`../.claude/pdca-archive/instincts.md`](../.claude/pdca-archive/instincts.md) -- format of the operational lessons archive.
-
-## Where features live
-
-| Topic | Read |
-|-------|------|
-| "How do I configure the lint hook?" | `customization.md` -> "UI lint" |
-| "My install errored — how do I rebuild?" | `quickstart.md` -> "Troubleshooting" |
-| "I want to add a custom skill" | `customization.md` -> "Custom skills" |
-| "What does Phase 5.5 do?" | `pipelines.md` -> "SE Pipeline / Bar Raisers" |
-| "How do hooks know when to fire?" | `hooks.md` -> "Lifecycle table" |
-| "Why is my Edit blocked?" | `hooks.md` -> "pretool.gate-output" |
+If a docs file is wrong, missing, or out-of-date relative to the code, open an issue with the file path and a one-line summary of the gap.

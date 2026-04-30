@@ -1,5 +1,7 @@
 # Claude Code Pipeline Kit
 
+> A drop-in governance harness for Claude Code: deterministic hooks, per-run pipeline state, and a complete SE/EIW/DRW/PDCA workflow library. Ships as a self-contained `.claude/` directory.
+
 Structured engineering pipelines for [Claude Code](https://docs.claude.com/claude-code). Multi-phase quality gates, persona-based reviews, deterministic hook enforcement, and a self-improving learning cycle -- in a single drop-in `.claude/` directory.
 
 This kit transforms Claude Code from a conversational assistant into a governed engineering harness:
@@ -39,6 +41,8 @@ Restart Claude Code. The next `/se-pipeline`, `/eiw-review`, `/defect-fix`, or `
 ---
 
 ## What's inside
+
+Production-ready governance for AI-assisted development. Drop the kit into your repo to get the deterministic enforcement and per-run state layer that powers the SE/EIW/DRW/PDCA pipelines.
 
 | Component | Count | Location |
 |-----------|------:|----------|

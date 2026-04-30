@@ -1,5 +1,4 @@
 {
-  "_comment": "Copy this file to .claude/settings.json in your project to enable Claude Code Pipeline Kit hooks. The $CLAUDE_PROJECT_DIR variable is set by the Claude Code runtime to the project root. See docs/settings-reference.md for details.",
   "permissions": {
     "allow": [
       "Edit(.claude/**)",
@@ -12,19 +11,31 @@
       {
         "matcher": "Skill",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh pretool.gate-skill", "timeout": 5 }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh pretool.gate-skill",
+            "timeout": 5
+          }
         ]
       },
       {
         "matcher": "Edit|Write",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh pretool.gate-output", "timeout": 5 }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh pretool.gate-output",
+            "timeout": 5
+          }
         ]
       },
       {
         "matcher": "Task",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh pretool.enforce-opus", "timeout": 5 }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh pretool.enforce-opus",
+            "timeout": 5
+          }
         ]
       }
     ],
@@ -32,33 +43,57 @@
       {
         "matcher": "Edit|Write",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh posttool.lint-ui", "timeout": 5 },
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh posttool.lint-skill", "timeout": 5 }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh posttool.lint-ui",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh posttool.lint-skill",
+            "timeout": 5
+          }
         ]
       },
       {
         "matcher": "Write",
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh posttool.remind-migration", "timeout": 5 }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh posttool.remind-migration",
+            "timeout": 5
+          }
         ]
       }
     ],
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh session.resume", "timeout": 10 }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh session.resume",
+            "timeout": 10
+          }
         ]
       }
     ],
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh stop.flush-manifest", "timeout": 10 }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh stop.flush-manifest",
+            "timeout": 10
+          }
         ]
       },
       {
         "hooks": [
-          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh stop.enforce-pipeline-completion", "timeout": 10 }
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh stop.enforce-pipeline-completion",
+            "timeout": 10
+          }
         ]
       }
     ]

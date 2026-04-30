@@ -47,8 +47,6 @@ Per-pipeline install (commands-only subsets):
   --eiw                   Install only EIW command files
   --drw                   Install only DRW (defect-fix) command file
   --pdca                  Install only PDCA command files
-  --qa                    [Deprecated; QA commands omitted from kit]
-  --ui                    [Deprecated; UI commands omitted from kit]
 
 Options:
   --all                   Install everything (skills + agents + rules + hooks +
@@ -60,6 +58,14 @@ Options:
   --force                 Overwrite existing files without prompting
   --list                  List all available components and exit
   -h, --help              Show this help message
+
+Examples:
+  bash install.sh --all                  # Full install (recommended)
+  bash install.sh --all --no-deps        # Install everything but skip hook build
+  bash install.sh --hooks --rules        # Install only hooks + rules
+  bash install.sh --se                   # Install only SE pipeline command files
+  bash install.sh --dry-run --all        # Preview without writing files
+
 
 Examples:
   ./install.sh /path/to/project           # Install all (default)

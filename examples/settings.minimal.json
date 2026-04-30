@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit(.claude/**)",
+      "Write(.claude/**)",
+      "MultiEdit(.claude/**)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Skill",
+        "hooks": [
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh pretool.gate-skill", "timeout": 5 }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh pretool.gate-output", "timeout": 5 }
+        ]
+      },
+      {
+        "matcher": "Task",
+        "hooks": [
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh pretool.enforce-opus", "timeout": 5 }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh stop.flush-manifest", "timeout": 5 },
+          { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/hook-runner.sh stop.enforce-pipeline-completion", "timeout": 5 }
+        ]
+      }
+    ]
+  }
+}
