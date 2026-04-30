@@ -1,7 +1,32 @@
-node_modules/
-*.log
+# OS / editor
 .DS_Store
-.claude/pipeline-state/se-*-*-*/
-.claude/pdca-archive/cycles/PDCA-*.md
-.claude/sessions/
+*.log
+*~
+*.swp
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# Claude Code: ephemeral data
 .claude/screenshots/
+.claude/sessions/
+
+# Claude Code: per-run pipeline state (transient; do not commit)
+.claude/pipeline-state/se-*/
+.claude/pipeline-state/eiw-*/
+.claude/pipeline-state/drw-*/
+.claude/pipeline-state/.stop-hook-log.jsonl
+.claude/pipeline-state/.pipeline-active-*
+.claude/pipeline-state/.pipeline-aborted-*
+.claude/pipeline-state/.pipeline-stalled-*
+.claude/pipeline-state/.trivial-fix-active*
+
+# Claude Code: PDCA cycle archives (per-cycle markdown files; index.json kept)
+.claude/pdca-archive/cycles/PDCA-*.md
+.claude/pdca-archive/runs/
+
+# Claude Code: hook build artifacts (committed: src + dist + lock; ignored: coverage + node_modules)
+.claude/hooks/coverage/
+.claude/hooks/node_modules/
